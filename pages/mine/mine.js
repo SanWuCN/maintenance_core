@@ -95,6 +95,22 @@ Page({
       .catch(() => {})
   },
 
+  resetUserState() {
+    const levelInfo = this.calculateLevel(0)
+    this.setData({
+      userInfo: {},
+      nickName: '',
+      avatarText: 'SW',
+      points: 0,
+      cardsCount: 0,
+      couponsCount: 0,
+      levelInfo,
+      ...this.getLevelViewState(levelInfo),
+      activeAppointment: null,
+      orders: []
+    })
+  },
+
   // 核心：处理会员等级和进度计算
   calculateLevel(points) {
     if (points < 1000) {
@@ -186,6 +202,27 @@ Page({
     wx.showToast({ title: '问题反馈', icon: 'none' })
   },
   goSecurity() {
-    wx.showToast({ title: '账号与安全', icon: 'none' })
+    const userSession = wx.getStorageSync('userSession') || {}
+    if (!userSession.userId) {
+      this.setData({ loginPanelVisible: true })
+      return
+    }
+    wx.showModal({
+      title: '账号与安全',
+      content: '确定退出当前账号吗？退出后本机将不再显示该账号的会员资产和订单。',
+      confirmText: '退出账号',
+      confirmColor: '#111111',
+      success: res => {
+        if (!res.confirm) return
+        wx.removeStorageSync('userSession')
+        wx.removeStorageSync('userInfo')
+        wx.removeStorageSync('orders')
+        this.resetUserState()
+        wx.showToast({
+          title: '已退出账号',
+          icon: 'none'
+        })
+      }
+    })
   }
 })

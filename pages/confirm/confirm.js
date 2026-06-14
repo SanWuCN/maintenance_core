@@ -1,11 +1,13 @@
 const app = getApp()
 const api = require('../../utils/api.js')
+const bookingFlow = require('../../utils/bookingFlow.js')
 
 Page({
   data: {
     booking: {},
     actionReady: false,
     submitting: false,
+    flowSteps: [],
     totalPrice: 0,
     hasAddons: false
   },
@@ -17,14 +19,15 @@ Page({
         icon: 'none'
       })
       setTimeout(() => {
-        wx.navigateTo({ url: '/pages/service/service' })
+        wx.redirectTo({ url: '/pages/service/service' })
       }, 600)
       return
     }
     this.setData({
       booking,
       totalPrice: this.calculateTotal(booking),
-      hasAddons: Boolean((booking.addons || []).length)
+      hasAddons: Boolean((booking.addons || []).length),
+      flowSteps: bookingFlow.buildFlowSteps('confirm', booking)
     })
   },
   onReady() {
@@ -39,8 +42,11 @@ Page({
     const greasePrice = booking.grease ? Number(booking.grease.price || 0) : 0
     return servicePrice + addonsPrice + greasePrice
   },
+  goFlowStep(e) {
+    bookingFlow.goFlowStep(e.currentTarget.dataset.key, 'confirm', app.globalData.booking)
+  },
   backEdit() {
-    wx.navigateBack()
+    wx.redirectTo({ url: '/pages/dorm/dorm' })
   },
   submit() {
     if (this.data.submitting) return

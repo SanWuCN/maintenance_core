@@ -8,6 +8,7 @@ Page({
   data: {
     heroReady: true,
     loginPanelVisible: false,
+    pendingServiceNavigation: false,
     businessIcons: {
       clean: '/static/icons/service-fan.png',
       upgrade: '/static/icons/service-chip.png',
@@ -34,12 +35,33 @@ Page({
     this.setData({ loginPanelVisible: true })
   },
   closeLoginPanel() {
-    this.setData({ loginPanelVisible: false })
+    this.setData({
+      loginPanelVisible: false,
+      pendingServiceNavigation: false
+    })
   },
   onLoginSuccess() {
-    this.setData({ loginPanelVisible: false })
+    const shouldGoService = this.data.pendingServiceNavigation
+    this.setData({
+      loginPanelVisible: false,
+      pendingServiceNavigation: false
+    })
+    if (shouldGoService) {
+      this.openServicePage()
+    }
   },
   goService() {
+    const userSession = wx.getStorageSync('userSession') || {}
+    if (!userSession.userId) {
+      this.setData({
+        loginPanelVisible: true,
+        pendingServiceNavigation: true
+      })
+      return
+    }
+    this.openServicePage()
+  },
+  openServicePage() {
     wx.navigateTo({
       url: '/pages/service/service'
     })

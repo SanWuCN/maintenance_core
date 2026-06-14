@@ -23,9 +23,18 @@
   border: 1rpx solid #e8e8e3;
 }
 
-.step.active {
+.step.active,
+.step.done {
   background: #111111;
   color: #ffffff;
+}
+
+.step.locked {
+  opacity: 0.48;
+}
+
+.step.clickable {
+  transform: translateZ(0);
 }
 
 .title-block {
@@ -46,6 +55,8 @@
 
 .service-card.selected {
   border-color: #111111;
+  background: #111111;
+  color: #ffffff;
 }
 
 .service-main {
@@ -66,6 +77,10 @@
   line-height: 1.45;
 }
 
+.service-card.selected .service-desc {
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .service-price {
   flex-shrink: 0;
   font-size: 40rpx;
@@ -82,9 +97,15 @@
 .tag {
   padding: 8rpx 14rpx;
   border-radius: 999rpx;
-  background: #f1f1ee;
-  color: #4e4e4e;
+  background: #111111;
+  color: #ffffff;
   font-size: 20rpx;
+  font-weight: 800;
+}
+
+.service-card.selected .tag {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
 }
 
 .check-dot {
@@ -98,8 +119,8 @@
 }
 
 .selected .check-dot {
-  background: #111111;
-  border-color: #111111;
+  background: #ffffff;
+  border-color: #ffffff;
 }
 
 .addon-panel,
@@ -259,28 +280,74 @@
   right: 0;
   bottom: 0;
   padding: 18rpx 28rpx calc(18rpx + env(safe-area-inset-bottom));
-  background: rgba(244, 244, 242, 0.96);
-  box-shadow: 0 -12rpx 34rpx rgba(20, 20, 20, 0.08);
   box-sizing: border-box;
-}
-
-.action-total {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 14rpx;
-  color: #777777;
-  font-size: 23rpx;
-  font-weight: 700;
-}
-
-.total-price {
-  color: #111111;
-  font-size: 34rpx;
-  font-weight: 900;
 }
 
 .bottom-action {
   width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 18rpx 34rpx rgba(0, 0, 0, 0.18);
+}
+
+.grease-mask {
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0 32rpx;
+  background: rgba(0, 0, 0, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  backdrop-filter: blur(6rpx);
+  -webkit-backdrop-filter: blur(6rpx);
+}
+
+.grease-modal {
+  width: 100%;
+  padding: 34rpx 30rpx 30rpx;
+  border-radius: 34rpx;
+  background: #ffffff;
+  box-shadow: 0 28rpx 80rpx rgba(0, 0, 0, 0.22);
+  box-sizing: border-box;
+}
+
+.grease-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.grease-modal-title {
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.grease-modal-copy {
+  margin-top: 8rpx;
+  color: #777777;
+  font-size: 23rpx;
+}
+
+.grease-close {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 54rpx;
+  color: #777777;
+  font-size: 48rpx;
+  text-align: center;
+}
+
+.grease-list {
+  border-top: 1rpx solid #f0f0ed;
+}
+
+.grease-confirm {
+  width: 100%;
+  margin-top: 28rpx;
   box-sizing: border-box;
 }

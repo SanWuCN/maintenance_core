@@ -3,13 +3,13 @@
     <view class="close-icon" bindtap="closeModal">×</view>
 
     <view class="header-section">
-      <view class="main-title" wx:if="{{loginStep === 'phone'}}">登录三物 <text class="highlight">IT</text> 小屋</view>
+      <view class="main-title" wx:if="{{isPhoneStep}}">登录三物 <text class="highlight">IT</text> 小屋</view>
       <view class="main-title" wx:else>注册三物 <text class="highlight">IT</text> 小屋</view>
-      <view class="sub-title" wx:if="{{loginStep === 'phone'}}">授权手机号后，用于预约联系和订单查询</view>
+      <view class="sub-title" wx:if="{{isPhoneStep}}">授权手机号后，用于预约联系和订单查询</view>
       <view class="sub-title" wx:else>完善头像和昵称后，即可自动创建账号</view>
     </view>
 
-    <block wx:if="{{loginStep === 'phone'}}">
+    <block wx:if="{{isPhoneStep}}">
       <view class="phone-section">
         <view class="tech-frame phone-frame">
           <view class="corner-tl"></view>
@@ -36,7 +36,9 @@
           <view class="corner-tl"></view>
           <view class="corner-br"></view>
           <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-            <image class="avatar-img" src="{{avatarDisplayUrl}}" mode="aspectFill"></image>
+            <image wx:if="{{hasAvatar}}" class="avatar-img" src="{{avatarDisplayUrl}}" mode="aspectFill"></image>
+            <view wx:else class="avatar-placeholder"></view>
+            
             <view class="avatar-mask">
               <view class="upload-icon"></view>
             </view>

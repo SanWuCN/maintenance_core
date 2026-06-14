@@ -9,7 +9,7 @@
         </view>
         <view class="user-info" bindtap="getProfile">
           <view class="nickname">{{nickName || '点击登录/授权'}}</view>
-          <view class="level-badge" bindtap="goLevelDesc">
+          <view class="level-badge" catchtap="goLevelDesc">
             <text class="level-icon">⚡</text>
             <text>{{levelInfo.name}}</text>
             <text class="level-arrow">></text>

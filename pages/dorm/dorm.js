@@ -1,9 +1,11 @@
 const app = getApp()
+const bookingFlow = require('../../utils/bookingFlow.js')
 
 Page({
   data: {
     actionReady: false,
     navigating: false,
+    flowSteps: [],
     dorms: [],
     savedDorm: '',
     selectedDorm: '',
@@ -25,8 +27,19 @@ Page({
       addressNote: saved.addressNote || ''
     })
   },
+  onShow() {
+    this.refreshFlowSteps()
+  },
   onReady() {
     this.setData({ actionReady: true })
+  },
+  refreshFlowSteps() {
+    this.setData({
+      flowSteps: bookingFlow.buildFlowSteps('dorm', app.globalData.booking)
+    })
+  },
+  goFlowStep(e) {
+    bookingFlow.goFlowStep(e.currentTarget.dataset.key, 'dorm', app.globalData.booking)
   },
   useSavedDorm() {
     this.setData({ selectedDorm: this.data.savedDorm })
@@ -74,7 +87,7 @@ Page({
       }
     }
     this.setData({ navigating: true })
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/confirm/confirm',
       complete: () => {
         this.setData({ navigating: false })

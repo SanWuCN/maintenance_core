@@ -1,10 +1,12 @@
 <view class="page-shell flow-page">
   <view class="step-line">
-    <text class="step done">服务</text>
-    <text class="step done">时间</text>
-    <text class="step active">设备</text>
-    <text class="step">地址</text>
-    <text class="step">确认</text>
+    <view
+      wx:for="{{flowSteps}}"
+      wx:key="key"
+      class="step {{item.state}} {{item.lockClass}}"
+      data-key="{{item.key}}"
+      bindtap="goFlowStep"
+    >{{item.label}}</view>
   </view>
 
   <view class="title-block">

@@ -29,6 +29,14 @@
   color: #ffffff;
 }
 
+.step.locked {
+  opacity: 0.48;
+}
+
+.step.clickable {
+  transform: translateZ(0);
+}
+
 .title-block {
   margin-bottom: 24rpx;
 }

@@ -1,9 +1,12 @@
 const app = getApp()
+const bookingFlow = require('../../utils/bookingFlow.js')
 
 Page({
   data: {
     actionReady: false,
     navigating: false,
+    flowSteps: [],
+    greaseModalVisible: false,
     selectedServiceId: 'combo',
     services: [
       {
@@ -62,8 +65,19 @@ Page({
     }
     this.setData({ addons }, this.updateTotal)
   },
+  onShow() {
+    this.refreshFlowSteps()
+  },
   onReady() {
     this.setData({ actionReady: true })
+  },
+  refreshFlowSteps() {
+    this.setData({
+      flowSteps: bookingFlow.buildFlowSteps('service', app.globalData.booking)
+    })
+  },
+  goFlowStep(e) {
+    bookingFlow.goFlowStep(e.currentTarget.dataset.key, 'service', app.globalData.booking)
   },
   selectService(e) {
     this.setData({
@@ -97,11 +111,16 @@ Page({
       totalPrice: service.price + addonsPrice + greasePrice
     })
   },
+  openGreaseModal() {
+    this.setData({ greaseModalVisible: true })
+  },
+  closeGreaseModal() {
+    this.setData({ greaseModalVisible: false })
+  },
   getSelectedGrease() {
     return this.data.greases.find(item => item.id === this.data.selectedGreaseId) || this.data.greases[0]
   },
-  next() {
-    if (this.data.navigating) return
+  buildBookingAndNavigate() {
     const service = this.data.services.find(item => item.id === this.data.selectedServiceId)
     const selectedAddons = this.data.addons.filter(item => item.selected)
     const selectedGrease = this.getSelectedGrease()
@@ -112,7 +131,10 @@ Page({
       })
       return
     }
-    this.setData({ navigating: true })
+    this.setData({
+      navigating: true,
+      greaseModalVisible: false
+    })
     app.globalData.booking = {
       ...app.globalData.booking,
       service: {
@@ -128,11 +150,23 @@ Page({
           }
         : null
     }
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/schedule/schedule',
       complete: () => {
         this.setData({ navigating: false })
       }
     })
+  },
+  next() {
+    if (this.data.navigating) return
+    if (this.data.selectedServiceId === 'combo') {
+      this.openGreaseModal()
+      return
+    }
+    this.buildBookingAndNavigate()
+  },
+  confirmGrease() {
+    if (this.data.navigating) return
+    this.buildBookingAndNavigate()
   }
 })

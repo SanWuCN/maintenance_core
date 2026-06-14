@@ -1,9 +1,11 @@
 const app = getApp()
+const bookingFlow = require('../../utils/bookingFlow.js')
 
 Page({
   data: {
     actionReady: false,
     navigating: false,
+    flowSteps: [],
     brands: ['联想', '华硕', '戴尔', '惠普', '苹果', '华为', '小米', '机械革命', '神舟', '其他'],
     selectedBrand: '联想',
     selectedModel: '',
@@ -35,8 +37,19 @@ Page({
       deviceNote: saved.note || ''
     })
   },
+  onShow() {
+    this.refreshFlowSteps()
+  },
   onReady() {
     this.setData({ actionReady: true })
+  },
+  refreshFlowSteps() {
+    this.setData({
+      flowSteps: bookingFlow.buildFlowSteps('device', app.globalData.booking)
+    })
+  },
+  goFlowStep(e) {
+    bookingFlow.goFlowStep(e.currentTarget.dataset.key, 'device', app.globalData.booking)
   },
   selectBrand(e) {
     const selectedBrand = e.currentTarget.dataset.brand
@@ -79,7 +92,7 @@ Page({
       }
     }
     this.setData({ navigating: true })
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/dorm/dorm',
       complete: () => {
         this.setData({ navigating: false })
