@@ -9,6 +9,14 @@ Page({
   data: {
     heroReady: false,
     bootLogo: `${api.ASSET_URL}/app-icon-boot-transparent.png`,
+    businessIcons: {
+      clean: `${api.ASSET_URL}/service-fan-icon.png`,
+      upgrade: `${api.ASSET_URL}/service-chip-icon.png`,
+      optimize: `${api.ASSET_URL}/service-gear-icon.png`,
+      cleanWhite: `${api.ASSET_URL}/service-fan-icon-white.png`,
+      upgradeWhite: `${api.ASSET_URL}/service-chip-icon-white.png`,
+      optimizeWhite: `${api.ASSET_URL}/service-gear-icon-white.png`
+    },
     posters: []
   },
   onLoad() {

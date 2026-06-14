@@ -153,37 +153,15 @@
 
 .business-item {
   position: relative;
-  height: 318rpx;
-  padding: 28rpx 14rpx;
-  border-radius: 26rpx;
-  border: 1rpx solid rgba(18, 18, 18, 0.06);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 248, 246, 0.96));
+  height: 336rpx;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(20, 20, 20, 0.06);
+  background: #ffffff;
   color: #111111;
-  box-shadow: 0 18rpx 34rpx rgba(12, 12, 12, 0.08), 0 1rpx 0 rgba(255, 255, 255, 0.95) inset;
+  box-shadow: 0 18rpx 36rpx rgba(12, 12, 12, 0.08);
   box-sizing: border-box;
   overflow: hidden;
   transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
-}
-
-.business-item::before,
-.business-item::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.business-item::before {
-  display: none;
-}
-
-.business-item::after {
-  right: -8rpx;
-  top: 18rpx;
-  width: 92rpx;
-  height: 210rpx;
-  border-top: 1rpx solid rgba(16, 20, 24, 0.12);
-  border-right: 1rpx solid rgba(16, 20, 24, 0.12);
-  transform: skewX(-20deg);
 }
 
 .business-item-pressed {
@@ -193,194 +171,179 @@
   box-shadow: 0 8rpx 20rpx rgba(15, 15, 15, 0.2);
 }
 
-.business-item-pressed::after {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.business-mark {
+.deco-top-line {
   position: absolute;
   top: 24rpx;
-  left: 18rpx;
-  width: 42rpx;
-  height: 6rpx;
-  border-radius: 999rpx;
-  background: currentColor;
-  transform: skewX(-28deg);
-}
-
-.business-mark::after {
-  content: "";
-  position: absolute;
-  left: 52rpx;
-  top: 2rpx;
-  width: 118rpx;
-  height: 1rpx;
-  background: rgba(16, 20, 24, 0.14);
-}
-
-.business-item-pressed .business-mark::after {
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.business-ui {
-  position: absolute;
-  left: 50%;
-  top: 70rpx;
-  width: 78rpx;
-  height: 78rpx;
-  color: currentColor;
-  opacity: 0.92;
-  transform: translateX(-50%);
-}
-
-.fan-ui {
-  border: 7rpx solid currentColor;
-  border-radius: 50%;
-  box-sizing: border-box;
-}
-
-.fan-blade {
-  position: absolute;
-  left: 29rpx;
-  top: 8rpx;
-  width: 20rpx;
-  height: 29rpx;
-  border-radius: 18rpx 18rpx 6rpx 6rpx;
-  background: currentColor;
-  transform-origin: 10rpx 31rpx;
-}
-
-.fan-blade-b {
-  transform: rotate(90deg);
-}
-
-.fan-blade-c {
-  transform: rotate(180deg);
-}
-
-.fan-blade-d {
-  transform: rotate(270deg);
-}
-
-.fan-core {
-  position: absolute;
-  left: 24rpx;
-  top: 24rpx;
-  width: 20rpx;
-  height: 20rpx;
-  border-radius: 50%;
-  background: #f8f8f6;
-  border: 5rpx solid currentColor;
-}
-
-.business-item-pressed .fan-core {
-  background: #151515;
-}
-
-.chip-ui {
-  width: 70rpx;
-  height: 70rpx;
-  border: 7rpx solid currentColor;
-  border-radius: 16rpx;
-  box-sizing: border-box;
-}
-
-.chip-ui::before,
-.chip-ui::after {
-  content: "";
-  position: absolute;
-  background: currentColor;
-}
-
-.chip-ui::before {
-  left: -18rpx;
-  top: 10rpx;
-  width: 12rpx;
-  height: 7rpx;
-  box-shadow: 0 17rpx 0 currentColor, 0 34rpx 0 currentColor, 64rpx 0 0 currentColor, 64rpx 17rpx 0 currentColor, 64rpx 34rpx 0 currentColor, 17rpx -28rpx 0 currentColor, 34rpx -28rpx 0 currentColor, 17rpx 62rpx 0 currentColor, 34rpx 62rpx 0 currentColor;
-}
-
-.chip-ui::after {
   left: 12rpx;
-  top: 12rpx;
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 27rpx 27rpx 0 currentColor;
+  right: 12rpx;
+  height: 44rpx;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='44' viewBox='0 0 220 44'><path d='M0 26 L18 26 M78 26 L128 26 L148 6 L220 6' stroke='%23bcc0c4' stroke-width='1.4' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.82;
+  pointer-events: none;
 }
 
-.chip-dot {
-  display: none;
-}
-
-.gear-ui {
-  background: currentColor;
-  clip-path: polygon(43% 0, 57% 0, 62% 15%, 74% 20%, 88% 13%, 99% 25%, 92% 39%, 98% 51%, 100% 64%, 85% 69%, 80% 81%, 85% 95%, 71% 100%, 58% 91%, 43% 91%, 29% 100%, 15% 94%, 20% 80%, 15% 68%, 0 63%, 2% 48%, 8% 38%, 1% 24%, 14% 13%, 27% 20%, 38% 15%);
-}
-
-.gear-ui::after {
-  content: "";
+.deco-top-block {
   position: absolute;
-  left: 24rpx;
-  top: 24rpx;
-  width: 30rpx;
-  height: 30rpx;
-  border-radius: 50%;
-  background: #f8f8f6;
+  top: 42rpx;
+  left: 26rpx;
+  width: 48rpx;
+  height: 8rpx;
+  background: currentColor;
+  transform: skewX(-42deg);
+  pointer-events: none;
 }
 
-.business-item-pressed .gear-ui::after {
-  background: #151515;
+.deco-right-lines {
+  position: absolute;
+  right: 0;
+  top: 62rpx;
+  width: 86rpx;
+  height: 208rpx;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86 208'><path d='M76 0 V42 L48 72 V118 L2 180' stroke='%23c0c4c8' stroke-width='1.5' fill='none'/><path d='M84 44 V74 L58 104' stroke='%23e1e3e5' stroke-width='1.5' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.deco-corner-bg {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 128rpx;
+  height: 128rpx;
+  background: linear-gradient(135deg, rgba(246, 247, 248, 0), rgba(238, 239, 241, 0.95));
+  clip-path: polygon(100% 0, 100% 100%, 0 100%, 18% 84%, 36% 84%, 68% 52%, 68% 30%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dot-matrix {
+  position: absolute;
+  right: 18rpx;
+  bottom: 18rpx;
+  width: 48rpx;
+  height: 42rpx;
+  background-image: radial-gradient(rgba(176, 180, 184, 0.95) 3rpx, transparent 3rpx);
+  background-size: 16rpx 16rpx;
+}
+
+.card-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 74rpx 18rpx 22rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.business-icon-wrap {
+  position: relative;
+  width: 90rpx;
+  height: 90rpx;
+}
+
+.business-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90rpx;
+  height: 90rpx;
+  transition: opacity 160ms ease;
+}
+
+.business-icon-light {
+  opacity: 0;
+}
+
+.business-item-pressed .business-icon-dark {
+  opacity: 0;
+}
+
+.business-item-pressed .business-icon-light {
+  opacity: 1;
 }
 
 .business-title {
-  position: absolute;
-  left: 10rpx;
-  right: 10rpx;
-  top: 174rpx;
+  margin-top: 24rpx;
   font-size: 32rpx;
   line-height: 1.15;
   font-weight: 800;
   text-align: center;
+  white-space: nowrap;
 }
 
-.business-deco {
+.bottom-area {
   position: absolute;
-  left: 18rpx;
-  right: 20rpx;
-  bottom: 26rpx;
-  width: auto;
-  height: 8rpx;
-  border-bottom: 2rpx solid rgba(20, 20, 20, 0.18);
+  left: 16rpx;
+  right: 16rpx;
+  bottom: 20rpx;
+  display: flex;
+  align-items: center;
 }
 
-.business-deco::before,
-.business-deco::after {
-  content: "";
-  position: absolute;
-  bottom: -2rpx;
+.icon-arrow {
+  width: 44rpx;
+  height: 44rpx;
+  border: 2rpx solid rgba(120, 124, 128, 0.72);
+  border-radius: 50%;
+  line-height: 39rpx;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 300;
+  box-sizing: border-box;
+}
+
+.bottom-deco {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-left: 12rpx;
+}
+
+.line-bottom {
+  flex: 1;
   height: 2rpx;
-  background: rgba(20, 20, 20, 0.28);
+  background: rgba(188, 192, 196, 0.72);
 }
 
-.business-deco::before {
-  left: 0;
-  width: 16rpx;
+.dots-bottom {
+  display: flex;
+  gap: 8rpx;
+  margin-left: 10rpx;
 }
 
-.business-deco::after {
-  right: -42rpx;
+.dot {
   width: 6rpx;
-  box-shadow: 18rpx 0 0 rgba(20, 20, 20, 0.2), 36rpx 0 0 rgba(20, 20, 20, 0.16);
+  height: 6rpx;
+  border-radius: 50%;
+  background: rgba(176, 180, 184, 0.92);
 }
 
-.business-item-pressed .business-deco {
-  border-color: rgba(255, 255, 255, 0.25);
+.business-item-pressed .deco-top-line,
+.business-item-pressed .deco-right-lines {
+  opacity: 0.34;
+  filter: invert(1);
 }
 
-.business-item-pressed .business-deco::before,
-.business-item-pressed .business-deco::after {
-  background: rgba(255, 255, 255, 0.42);
-  box-shadow: 18rpx 0 0 rgba(255, 255, 255, 0.28), 36rpx 0 0 rgba(255, 255, 255, 0.18);
+.business-item-pressed .deco-corner-bg {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.business-item-pressed .line-bottom,
+.business-item-pressed .dot,
+.business-item-pressed .dot-matrix {
+  opacity: 0.7;
+  filter: invert(1);
+}
+
+.business-item-pressed .icon-arrow {
+  border-color: rgba(255, 255, 255, 0.45);
 }

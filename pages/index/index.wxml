@@ -24,31 +24,82 @@
 
     <view class="business-grid">
       <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="goService">
-        <view class="business-mark"></view>
-        <view class="business-ui fan-ui">
-          <view class="fan-blade fan-blade-a"></view>
-          <view class="fan-blade fan-blade-b"></view>
-          <view class="fan-blade fan-blade-c"></view>
-          <view class="fan-blade fan-blade-d"></view>
-          <view class="fan-core"></view>
+        <view class="deco-top-line"></view>
+        <view class="deco-top-block"></view>
+        <view class="deco-right-lines"></view>
+        <view class="deco-corner-bg">
+          <view class="dot-matrix"></view>
         </view>
-        <view class="business-title">清灰维护</view>
-        <view class="business-deco"></view>
+        <view class="card-content">
+          <view class="business-icon-wrap">
+            <image class="business-icon business-icon-dark" src="{{businessIcons.clean}}" mode="aspectFit"></image>
+            <image class="business-icon business-icon-light" src="{{businessIcons.cleanWhite}}" mode="aspectFit"></image>
+          </view>
+          <view class="business-title">清灰维护</view>
+          <view class="bottom-area">
+            <view class="icon-arrow">→</view>
+            <view class="bottom-deco">
+              <view class="line-bottom"></view>
+              <view class="dots-bottom">
+                <view class="dot"></view>
+                <view class="dot"></view>
+                <view class="dot"></view>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
       <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
-        <view class="business-mark"></view>
-        <view class="business-ui chip-ui">
-          <view class="chip-dot chip-dot-a"></view>
-          <view class="chip-dot chip-dot-b"></view>
+        <view class="deco-top-line"></view>
+        <view class="deco-top-block"></view>
+        <view class="deco-right-lines"></view>
+        <view class="deco-corner-bg">
+          <view class="dot-matrix"></view>
         </view>
-        <view class="business-title">硬件升级</view>
-        <view class="business-deco"></view>
+        <view class="card-content">
+          <view class="business-icon-wrap">
+            <image class="business-icon business-icon-dark" src="{{businessIcons.upgrade}}" mode="aspectFit"></image>
+            <image class="business-icon business-icon-light" src="{{businessIcons.upgradeWhite}}" mode="aspectFit"></image>
+          </view>
+          <view class="business-title">硬件升级</view>
+          <view class="bottom-area">
+            <view class="icon-arrow">→</view>
+            <view class="bottom-deco">
+              <view class="line-bottom"></view>
+              <view class="dots-bottom">
+                <view class="dot"></view>
+                <view class="dot"></view>
+                <view class="dot"></view>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
       <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
-        <view class="business-mark"></view>
-        <view class="business-ui gear-ui"></view>
-        <view class="business-title">系统优化</view>
-        <view class="business-deco"></view>
+        <view class="deco-top-line"></view>
+        <view class="deco-top-block"></view>
+        <view class="deco-right-lines"></view>
+        <view class="deco-corner-bg">
+          <view class="dot-matrix"></view>
+        </view>
+        <view class="card-content">
+          <view class="business-icon-wrap">
+            <image class="business-icon business-icon-dark" src="{{businessIcons.optimize}}" mode="aspectFit"></image>
+            <image class="business-icon business-icon-light" src="{{businessIcons.optimizeWhite}}" mode="aspectFit"></image>
+          </view>
+          <view class="business-title">系统优化</view>
+          <view class="bottom-area">
+            <view class="icon-arrow">→</view>
+            <view class="bottom-deco">
+              <view class="line-bottom"></view>
+              <view class="dots-bottom">
+                <view class="dot"></view>
+                <view class="dot"></view>
+                <view class="dot"></view>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
     </view>
   </scroll-view>
