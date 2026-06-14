@@ -1,0 +1,316 @@
+#!/usr/bin/env python3
+import json
+import os
+import sqlite3
+import time
+import uuid
+from datetime import date, datetime, timedelta
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlparse
+
+
+BASE_DIR = os.environ.get("SWART_BASE_DIR", "/opt/swart-core")
+DB_PATH = os.environ.get("SWART_DB_PATH", os.path.join(BASE_DIR, "data", "swart.sqlite3"))
+HOST = os.environ.get("SWART_HOST", "127.0.0.1")
+PORT = int(os.environ.get("SWART_PORT", "3107"))
+MAX_PER_SLOT = int(os.environ.get("SWART_MAX_PER_SLOT", "4"))
+
+SERVICES = [
+    {
+        "id": "combo",
+        "name": "清灰换脂",
+        "price": 50,
+        "desc": "拆机清灰 + 散热硅脂更换，适合温度高、风扇响、性能下降。",
+        "tags": ["推荐", "性能恢复", "散热优化"],
+    },
+    {
+        "id": "clean",
+        "name": "单清灰",
+        "price": 30,
+        "desc": "风扇、散热鳍片、机身缝隙清洁，适合日常维护。",
+        "tags": ["基础维护", "灰尘清理"],
+    },
+]
+
+ADDONS = [
+    {"name": "屏幕深度清洁", "oldPrice": 8},
+    {"name": "键盘表面保养", "oldPrice": 6},
+    {"name": "USB / 接口除尘", "oldPrice": 5},
+    {"name": "外壳指纹清理", "oldPrice": 5},
+]
+
+SLOTS = [
+    {"id": "noon", "time": "12:00 - 15:00", "copy": "午间取送，适合上午下课后交接"},
+    {"id": "afternoon", "time": "15:00 - 18:00", "copy": "下午维护，晚饭前后可取回"},
+    {"id": "night", "time": "18:00 - 21:00", "copy": "晚间服务，适合白天有课同学"},
+]
+
+MODEL_MAP = {
+    "联想": ["拯救者 Y7000P", "拯救者 R7000P", "小新 Pro 14", "ThinkBook 14+", "ThinkPad E14"],
+    "华硕": ["天选 4", "天选 5 Pro", "ROG 魔霸", "无畏 Pro 15", "灵耀 14"],
+    "戴尔": ["游匣 G15", "灵越 14 Plus", "XPS 13", "成就 Vostro", "外星人 m16"],
+    "惠普": ["暗影精灵 9", "暗影精灵 10", "战 66", "星 Book Pro", "ENVY 13"],
+    "苹果": ["MacBook Air M1", "MacBook Air M2", "MacBook Pro 13", "MacBook Pro 14", "MacBook Pro 16"],
+    "华为": ["MateBook 14", "MateBook D 14", "MateBook X Pro", "MateBook 16s"],
+    "小米": ["RedmiBook Pro 14", "RedmiBook Pro 15", "小米笔记本 Pro", "Redmi G"],
+    "机械革命": ["极光 Pro", "蛟龙 16", "旷世 16", "无界 14 Pro"],
+    "神舟": ["战神 Z7", "战神 Z8", "优雅 X5", "战神 TX9"],
+    "其他": ["不确定型号", "台式机主机", "一体机", "其他笔记本"],
+}
+
+
+def connect_db():
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    with connect_db() as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS orders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_no TEXT NOT NULL UNIQUE,
+                status TEXT NOT NULL DEFAULT '待确认',
+                service_id TEXT NOT NULL,
+                service_name TEXT NOT NULL,
+                service_price INTEGER NOT NULL,
+                appointment_date TEXT NOT NULL,
+                slot_id TEXT NOT NULL,
+                slot_time TEXT NOT NULL,
+                device_brand TEXT,
+                device_model TEXT,
+                device_note TEXT,
+                dorm TEXT NOT NULL,
+                contact_name TEXT,
+                contact_phone TEXT NOT NULL,
+                address_note TEXT,
+                payload TEXT NOT NULL,
+                created_at INTEGER NOT NULL
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_slot ON orders(appointment_date, slot_id, status)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_phone ON orders(contact_phone, created_at)")
+
+
+def json_response(handler, status, payload):
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    handler.send_response(status)
+    handler.send_header("Content-Type", "application/json; charset=utf-8")
+    handler.send_header("Content-Length", str(len(body)))
+    handler.send_header("Access-Control-Allow-Origin", "*")
+    handler.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    handler.send_header("Access-Control-Allow-Headers", "Content-Type")
+    handler.end_headers()
+    handler.wfile.write(body)
+
+
+def route_path(raw_path):
+    path = urlparse(raw_path).path.rstrip("/") or "/"
+    if path.startswith("/swart-api"):
+        path = path[len("/swart-api") :] or "/"
+    return path
+
+
+def parse_body(handler):
+    length = int(handler.headers.get("Content-Length") or 0)
+    if not length:
+        return {}
+    raw = handler.rfile.read(length)
+    return json.loads(raw.decode("utf-8"))
+
+
+def service_by_id(service_id):
+    return next((item for item in SERVICES if item["id"] == service_id), None)
+
+
+def slot_by_id(slot_id):
+    return next((item for item in SLOTS if item["id"] == slot_id), None)
+
+
+def slot_counts(appointment_date):
+    with connect_db() as conn:
+        rows = conn.execute(
+            """
+            SELECT slot_id, COUNT(*) AS total
+            FROM orders
+            WHERE appointment_date = ? AND status != '已取消'
+            GROUP BY slot_id
+            """,
+            (appointment_date,),
+        ).fetchall()
+    return {row["slot_id"]: row["total"] for row in rows}
+
+
+def make_slots(appointment_date):
+    counts = slot_counts(appointment_date)
+    return [
+        {
+            **slot,
+            "capacity": MAX_PER_SLOT,
+            "booked": counts.get(slot["id"], 0),
+            "remaining": max(0, MAX_PER_SLOT - counts.get(slot["id"], 0)),
+        }
+        for slot in SLOTS
+    ]
+
+
+def create_order(payload):
+    service = payload.get("service") or {}
+    schedule = payload.get("schedule") or {}
+    device = payload.get("device") or {}
+    dorm = payload.get("dorm") or {}
+
+    service_data = service_by_id(service.get("id") or service.get("service_id"))
+    slot_data = slot_by_id(schedule.get("slotId") or schedule.get("slot_id"))
+    appointment_date = schedule.get("dateValue") or schedule.get("appointment_date")
+    contact_phone = dorm.get("contactPhone") or dorm.get("contact_phone")
+    dorm_name = dorm.get("dorm")
+
+    if not service_data:
+        return 400, {"ok": False, "message": "服务项目无效"}
+    if not slot_data:
+        return 400, {"ok": False, "message": "预约时间段无效"}
+    if not appointment_date:
+        return 400, {"ok": False, "message": "预约日期不能为空"}
+    if not dorm_name:
+        return 400, {"ok": False, "message": "宿舍楼不能为空"}
+    if not contact_phone:
+        return 400, {"ok": False, "message": "联系方式不能为空"}
+
+    booked = slot_counts(appointment_date).get(slot_data["id"], 0)
+    if booked >= MAX_PER_SLOT:
+        return 409, {"ok": False, "message": "该时间段已约满，请选择其他时间"}
+
+    order_no = f"SW{datetime.now().strftime('%Y%m%d')}{uuid.uuid4().hex[:8].upper()}"
+    now = int(time.time())
+    normalized = {
+        "service": service_data,
+        "addons": payload.get("addons") or ADDONS,
+        "schedule": {
+            "dateValue": appointment_date,
+            "dateText": schedule.get("dateText") or appointment_date,
+            "slotId": slot_data["id"],
+            "slotTime": slot_data["time"],
+        },
+        "device": device,
+        "dorm": dorm,
+    }
+
+    with connect_db() as conn:
+        conn.execute(
+            """
+            INSERT INTO orders (
+                order_no, status, service_id, service_name, service_price,
+                appointment_date, slot_id, slot_time,
+                device_brand, device_model, device_note,
+                dorm, contact_name, contact_phone, address_note,
+                payload, created_at
+            )
+            VALUES (?, '待确认', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                order_no,
+                service_data["id"],
+                service_data["name"],
+                service_data["price"],
+                appointment_date,
+                slot_data["id"],
+                slot_data["time"],
+                device.get("brand"),
+                device.get("finalModel") or device.get("model"),
+                device.get("note"),
+                dorm_name,
+                dorm.get("contactName"),
+                contact_phone,
+                dorm.get("addressNote"),
+                json.dumps(normalized, ensure_ascii=False),
+                now,
+            ),
+        )
+    return 201, {"ok": True, "orderNo": order_no, "order": {**normalized, "status": "待确认", "createdAt": now}}
+
+
+class Handler(BaseHTTPRequestHandler):
+    server_version = "SwartCoreAPI/1.0"
+
+    def do_OPTIONS(self):
+        json_response(self, 204, {})
+
+    def do_GET(self):
+        path = route_path(self.path)
+        query = parse_qs(urlparse(self.path).query)
+        if path == "/health":
+            json_response(self, 200, {"ok": True, "service": "swart-core-api", "time": int(time.time())})
+            return
+        if path == "/api/config":
+            json_response(
+                self,
+                200,
+                {
+                    "ok": True,
+                    "services": SERVICES,
+                    "addons": ADDONS,
+                    "slots": SLOTS,
+                    "dorms": [f"{index}号楼" for index in range(1, 22)],
+                    "brands": list(MODEL_MAP.keys()),
+                    "modelMap": MODEL_MAP,
+                },
+            )
+            return
+        if path == "/api/slots":
+            appointment_date = (query.get("date") or [date.today().isoformat()])[0]
+            json_response(self, 200, {"ok": True, "date": appointment_date, "slots": make_slots(appointment_date)})
+            return
+        if path == "/api/orders":
+            phone = (query.get("phone") or [""])[0]
+            if not phone:
+                json_response(self, 400, {"ok": False, "message": "phone 参数不能为空"})
+                return
+            with connect_db() as conn:
+                rows = conn.execute(
+                    """
+                    SELECT payload, status, order_no, created_at
+                    FROM orders
+                    WHERE contact_phone = ?
+                    ORDER BY created_at DESC
+                    LIMIT 20
+                    """,
+                    (phone,),
+                ).fetchall()
+            orders = []
+            for row in rows:
+                item = json.loads(row["payload"])
+                item["status"] = row["status"]
+                item["orderNo"] = row["order_no"]
+                item["createdAt"] = row["created_at"]
+                orders.append(item)
+            json_response(self, 200, {"ok": True, "orders": orders})
+            return
+        json_response(self, 404, {"ok": False, "message": "接口不存在"})
+
+    def do_POST(self):
+        path = route_path(self.path)
+        try:
+            payload = parse_body(self)
+        except Exception:
+            json_response(self, 400, {"ok": False, "message": "请求 JSON 格式错误"})
+            return
+        if path == "/api/orders":
+            status, response = create_order(payload)
+            json_response(self, status, response)
+            return
+        json_response(self, 404, {"ok": False, "message": "接口不存在"})
+
+    def log_message(self, fmt, *args):
+        print("%s - - [%s] %s" % (self.client_address[0], self.log_date_time_string(), fmt % args), flush=True)
+
+
+if __name__ == "__main__":
+    init_db()
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    print(f"SW.ART CORE API listening on {HOST}:{PORT}, db={DB_PATH}", flush=True)
+    server.serve_forever()

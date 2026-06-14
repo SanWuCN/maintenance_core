@@ -1,0 +1,42 @@
+<view class="page-shell mine-page">
+  <view class="profile tech-card">
+    <image class="profile-logo" src="{{logoUrl}}" mode="aspectFit"></image>
+    <view class="profile-info">
+      <view class="profile-name">{{nickName || '校园用户'}}</view>
+      <view class="profile-sub">{{savedDorm || '未保存宿舍楼'}}</view>
+    </view>
+    <button class="login-btn" bindtap="getProfile">登录</button>
+  </view>
+
+  <view class="reservation-card tech-card">
+    <view class="card-head">
+      <view class="section-title">我的预约</view>
+      <button class="small-btn" bindtap="goService">新预约</button>
+    </view>
+    <block wx:if="{{orders.length}}">
+      <view wx:for="{{orders}}" wx:key="createdAt" class="order-item">
+        <view>
+          <view class="order-title">{{item.service.name}} · {{item.status}}</view>
+          <view class="order-copy">{{item.schedule.dateText}} {{item.schedule.slotTime}}</view>
+          <view class="order-copy">{{item.device.brand}} / {{item.dorm.dorm}}</view>
+        </view>
+        <view class="order-price">¥{{item.service.price}}</view>
+      </view>
+    </block>
+    <view wx:else class="empty">
+      <view class="empty-title">暂无预约</view>
+      <button class="empty-btn" bindtap="goService">立即预约</button>
+    </view>
+  </view>
+
+  <view class="status-grid">
+    <view class="status-card tech-card">
+      <view class="status-value">取送</view>
+      <view class="status-label">楼下交接</view>
+    </view>
+    <view class="status-card tech-card">
+      <view class="status-value">视频</view>
+      <view class="status-label">过程记录</view>
+    </view>
+  </view>
+</view>

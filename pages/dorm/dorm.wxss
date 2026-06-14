@@ -1,0 +1,129 @@
+.flow-page {
+  padding-bottom: 150rpx;
+}
+
+.step-line {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10rpx;
+  margin-bottom: 34rpx;
+}
+
+.step {
+  height: 52rpx;
+  line-height: 52rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #9a9a9a;
+  text-align: center;
+  font-size: 22rpx;
+  border: 1rpx solid #e8e8e3;
+}
+
+.step.active,
+.step.done {
+  background: #111111;
+  color: #ffffff;
+}
+
+.title-block {
+  margin-bottom: 24rpx;
+}
+
+.profile-card,
+.dorm-card,
+.form-card,
+.delivery-card {
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.profile-title,
+.block-title {
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.profile-copy {
+  margin-top: 8rpx;
+  color: #777777;
+  font-size: 23rpx;
+}
+
+.use-btn {
+  flex-shrink: 0;
+  width: 120rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  border-radius: 999rpx;
+  background: #111111;
+  color: #ffffff;
+  font-size: 24rpx;
+  padding: 0;
+}
+
+.dorm-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.dorm-chip {
+  height: 74rpx;
+  line-height: 74rpx;
+  border-radius: 18rpx;
+  background: #f4f4f1;
+  color: #333333;
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.dorm-chip.selected {
+  background: #111111;
+  color: #ffffff;
+}
+
+.text-input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 18rpx;
+  background: #f7f7f4;
+  border: 1rpx solid #ededed;
+  font-size: 25rpx;
+}
+
+.text-input {
+  height: 88rpx;
+  margin-top: 16rpx;
+  padding: 0 22rpx;
+}
+
+.textarea {
+  min-height: 150rpx;
+  margin-top: 16rpx;
+  padding: 22rpx;
+}
+
+.delivery-row {
+  color: #666666;
+  font-size: 24rpx;
+  line-height: 1.75;
+}
+
+.bottom-action {
+  position: fixed;
+  left: 28rpx;
+  right: 28rpx;
+  bottom: calc(28rpx + env(safe-area-inset-bottom));
+  z-index: 5;
+}

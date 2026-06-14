@@ -1,0 +1,61 @@
+/**app.wxss**/
+page {
+  min-height: 100vh;
+  background: #f4f4f2;
+  color: #111111;
+  font-family: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+button {
+  font: inherit;
+}
+
+.page-shell {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 28rpx 28rpx 48rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.muted {
+  color: #777777;
+}
+
+.primary-btn {
+  height: 92rpx;
+  border-radius: 999rpx;
+  background: #111111;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+}
+
+.ghost-btn {
+  height: 82rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #111111;
+  border: 1rpx solid #e5e5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tech-card {
+  background: #ffffff;
+  border: 1rpx solid #e8e8e3;
+  border-radius: 24rpx;
+  box-shadow: 0 16rpx 40rpx rgba(20, 20, 20, 0.05);
+}

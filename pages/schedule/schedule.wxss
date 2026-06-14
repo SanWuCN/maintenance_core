@@ -1,0 +1,158 @@
+.flow-page {
+  padding-bottom: 150rpx;
+}
+
+.step-line {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10rpx;
+  margin-bottom: 34rpx;
+}
+
+.step {
+  height: 52rpx;
+  line-height: 52rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #9a9a9a;
+  text-align: center;
+  font-size: 22rpx;
+  border: 1rpx solid #e8e8e3;
+}
+
+.step.active,
+.step.done {
+  background: #111111;
+  color: #ffffff;
+}
+
+.title-block {
+  margin-bottom: 24rpx;
+}
+
+.date-strip {
+  white-space: nowrap;
+  margin: 0 -28rpx;
+  padding: 0 28rpx 22rpx;
+  box-sizing: border-box;
+}
+
+.date-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 108rpx;
+  height: 132rpx;
+  margin-right: 14rpx;
+  border: 1rpx solid #e8e8e3;
+  border-radius: 22rpx;
+  background: #ffffff;
+}
+
+.date-item.selected {
+  background: #111111;
+  color: #ffffff;
+}
+
+.date-week {
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.date-day {
+  margin-top: 8rpx;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.date-label {
+  margin-top: 4rpx;
+  color: #8a8a8a;
+  font-size: 20rpx;
+}
+
+.selected .date-label {
+  color: #d7d7d7;
+}
+
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.slot-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 116rpx;
+  padding: 26rpx;
+}
+
+.slot-card.selected {
+  background: #111111;
+  color: #ffffff;
+}
+
+.slot-time {
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.slot-copy {
+  margin-top: 8rpx;
+  color: #777777;
+  font-size: 22rpx;
+}
+
+.selected .slot-copy {
+  color: #d5d5d5;
+}
+
+.slot-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.remaining {
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.slot-dot {
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  border: 2rpx solid currentColor;
+}
+
+.selected .slot-dot {
+  background: #ffffff;
+}
+
+.rule-card {
+  margin-top: 22rpx;
+  padding: 28rpx;
+}
+
+.rule-title {
+  font-size: 30rpx;
+  font-weight: 900;
+  margin-bottom: 14rpx;
+}
+
+.rule-row {
+  color: #666666;
+  font-size: 24rpx;
+  line-height: 1.7;
+}
+
+.bottom-action {
+  position: fixed;
+  left: 28rpx;
+  right: 28rpx;
+  bottom: calc(28rpx + env(safe-area-inset-bottom));
+  z-index: 5;
+}

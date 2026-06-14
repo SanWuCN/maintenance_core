@@ -1,0 +1,162 @@
+.home {
+  padding: 12rpx 24rpx 42rpx;
+}
+
+.poster-swiper {
+  height: 1248rpx;
+  border-radius: 28rpx;
+  overflow: hidden;
+  box-shadow: 0 22rpx 54rpx rgba(10, 10, 10, 0.1);
+}
+
+.poster-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 28rpx;
+  background: #e8e8e4;
+}
+
+.poster-image,
+.poster-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.poster-fade {
+  background: linear-gradient(180deg, rgba(244, 244, 242, 0) 54%, rgba(244, 244, 242, 0.46) 72%, rgba(244, 244, 242, 0.94) 100%);
+}
+
+.business-glass {
+  position: absolute;
+  left: 22rpx;
+  right: 22rpx;
+  bottom: 24rpx;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+  padding: 14rpx;
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(24rpx);
+  box-shadow: 0 14rpx 42rpx rgba(0, 0, 0, 0.12);
+}
+
+.business-item {
+  height: 132rpx;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  color: #191919;
+}
+
+.business-item.active {
+  background: rgba(17, 17, 17, 0.92);
+  color: #ffffff;
+}
+
+.business-icon {
+  width: 38rpx;
+  height: 38rpx;
+  position: relative;
+}
+
+.business-icon.fan {
+  border: 4rpx solid currentColor;
+  border-radius: 50%;
+}
+
+.business-icon.fan::after {
+  content: "";
+  position: absolute;
+  left: 11rpx;
+  top: 11rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 -13rpx 0 -2rpx currentColor, 12rpx 7rpx 0 -2rpx currentColor, -12rpx 7rpx 0 -2rpx currentColor;
+}
+
+.business-icon.chip {
+  border: 4rpx solid currentColor;
+  border-radius: 8rpx;
+}
+
+.business-icon.chip::after {
+  content: "";
+  position: absolute;
+  left: -8rpx;
+  right: -8rpx;
+  top: 12rpx;
+  height: 4rpx;
+  background: currentColor;
+  box-shadow: 0 10rpx 0 currentColor;
+}
+
+.business-icon.tune::before,
+.business-icon.tune::after {
+  content: "";
+  position: absolute;
+  left: 2rpx;
+  right: 2rpx;
+  height: 4rpx;
+  border-radius: 999rpx;
+  background: currentColor;
+}
+
+.business-icon.tune::before {
+  top: 10rpx;
+  box-shadow: 0 16rpx 0 currentColor;
+}
+
+.business-icon.tune::after {
+  top: 5rpx;
+  left: 21rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  box-shadow: -18rpx 16rpx 0 currentColor;
+}
+
+.business-title {
+  font-size: 23rpx;
+  font-weight: 600;
+}
+
+.assurance {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.assurance-item {
+  padding: 18rpx 10rpx;
+  border: 1rpx solid rgba(20, 20, 20, 0.07);
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.72);
+  text-align: center;
+}
+
+.assurance-k {
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.assurance-v {
+  margin-top: 3rpx;
+  color: #777777;
+  font-size: 20rpx;
+}

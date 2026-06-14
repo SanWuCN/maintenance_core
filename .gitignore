@@ -1,0 +1,23 @@
+# WeChat DevTools local/private files
+project.private.config.json
+.idea/
+.vscode/
+
+# Dependencies and build output
+node_modules/
+miniprogram_npm/
+dist/
+build/
+
+# Local assets are served from the cloud, not packaged in the mini program.
+assets/
+
+# Python/runtime noise
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs and environment
+*.log
+.env
+.env.*

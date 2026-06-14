@@ -1,0 +1,17 @@
+[Unit]
+Description=SW.ART CORE campus cleaning booking API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/swart-core
+Environment=SWART_BASE_DIR=/opt/swart-core
+Environment=SWART_DB_PATH=/opt/swart-core/data/swart.sqlite3
+Environment=SWART_HOST=127.0.0.1
+Environment=SWART_PORT=3107
+ExecStart=/usr/bin/python3 /opt/swart-core/swart_api.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

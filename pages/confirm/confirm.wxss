@@ -1,0 +1,104 @@
+.confirm-page {
+  padding-bottom: 170rpx;
+}
+
+.title-block {
+  margin-bottom: 24rpx;
+}
+
+.summary-card,
+.gift-card,
+.promise-card {
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.summary-title {
+  font-size: 36rpx;
+  font-weight: 900;
+}
+
+.summary-sub {
+  margin-top: 8rpx;
+  color: #777777;
+  font-size: 23rpx;
+}
+
+.summary-price {
+  font-size: 44rpx;
+  font-weight: 900;
+}
+
+.divider {
+  height: 1rpx;
+  background: #ededed;
+  margin: 24rpx 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 13rpx 0;
+  font-size: 25rpx;
+}
+
+.label {
+  flex-shrink: 0;
+  color: #777777;
+}
+
+.value {
+  text-align: right;
+  font-weight: 700;
+}
+
+.gift-title,
+.promise-title {
+  margin-bottom: 16rpx;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.gift-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18rpx;
+  padding: 12rpx 0;
+  color: #333333;
+  font-size: 24rpx;
+}
+
+.old-price {
+  color: #999999;
+  text-decoration: line-through;
+}
+
+.free-price {
+  color: #111111;
+  font-weight: 900;
+}
+
+.promise-row {
+  color: #666666;
+  font-size: 24rpx;
+  line-height: 1.75;
+}
+
+.action-row {
+  position: fixed;
+  left: 28rpx;
+  right: 28rpx;
+  bottom: calc(28rpx + env(safe-area-inset-bottom));
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 210rpx 1fr;
+  gap: 16rpx;
+}

@@ -1,0 +1,68 @@
+const app = getApp()
+const api = require('../../utils/api.js')
+
+Page({
+  data: {
+    booking: {}
+  },
+  onShow() {
+    const booking = app.globalData.booking || {}
+    if (!booking.service || !booking.schedule || !booking.device || !booking.dorm) {
+      wx.showToast({
+        title: '请先完成预约信息',
+        icon: 'none'
+      })
+      setTimeout(() => {
+        wx.navigateTo({ url: '/pages/service/service' })
+      }, 600)
+      return
+    }
+    this.setData({ booking })
+  },
+  backEdit() {
+    wx.navigateBack()
+  },
+  submit() {
+    wx.showLoading({ title: '提交中' })
+    api.request('/api/orders', {
+      method: 'POST',
+      data: this.data.booking
+    })
+      .then(res => {
+        const order = {
+          ...(res.order || this.data.booking),
+          orderNo: res.orderNo,
+          status: '待确认',
+          createdAt: Date.now()
+        }
+        this.saveLocalOrder(order)
+        this.finishSubmit('预约已提交', `订单号：${res.orderNo}`)
+      })
+      .catch(err => {
+        const order = {
+          ...this.data.booking,
+          status: '待确认',
+          createdAt: Date.now()
+        }
+        this.saveLocalOrder(order)
+        this.finishSubmit('已本地保存', err.message || '接口暂时不可用，请稍后联系商家确认。')
+      })
+  },
+  saveLocalOrder(order) {
+    const orders = wx.getStorageSync('orders') || []
+    orders.unshift(order)
+    wx.setStorageSync('orders', orders)
+  },
+  finishSubmit(title, extra) {
+    wx.hideLoading()
+    app.globalData.booking = {}
+    wx.showModal({
+      title,
+      content: `${extra}\n我们会按你填写的联系方式确认取机，请提前 10 分钟到宿舍楼下交接。`,
+      showCancel: false,
+      success: () => {
+        wx.switchTab({ url: '/pages/mine/mine' })
+      }
+    })
+  }
+})

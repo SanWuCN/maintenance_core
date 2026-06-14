@@ -1,0 +1,119 @@
+.mine-page {
+  padding: 24rpx;
+}
+
+.profile,
+.reservation-card {
+  padding: 28rpx;
+  margin-bottom: 18rpx;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.profile-logo {
+  width: 164rpx;
+  height: 64rpx;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.profile-sub {
+  margin-top: 6rpx;
+  color: #777777;
+  font-size: 22rpx;
+}
+
+.login-btn,
+.small-btn,
+.empty-btn {
+  height: 58rpx;
+  line-height: 58rpx;
+  border-radius: 999rpx;
+  background: #111111;
+  color: #ffffff;
+  font-size: 23rpx;
+  padding: 0 24rpx;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-bottom: 12rpx;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 18rpx;
+  padding: 20rpx 0;
+  border-top: 1rpx solid #f0f0ed;
+}
+
+.order-title {
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.order-copy {
+  margin-top: 6rpx;
+  color: #777777;
+  font-size: 22rpx;
+}
+
+.order-price {
+  flex-shrink: 0;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.empty {
+  padding: 36rpx 0 20rpx;
+  text-align: center;
+}
+
+.empty-title {
+  color: #777777;
+  font-size: 24rpx;
+}
+
+.empty-btn {
+  width: 180rpx;
+  margin: 20rpx auto 0;
+  padding: 0;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14rpx;
+}
+
+.status-card {
+  padding: 28rpx 18rpx;
+  text-align: center;
+}
+
+.status-value {
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.status-label {
+  margin-top: 6rpx;
+  color: #777777;
+  font-size: 22rpx;
+}

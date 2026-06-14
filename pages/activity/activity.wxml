@@ -1,0 +1,31 @@
+<view class="page-shell activity-page">
+  <view class="page-head">
+    <view class="section-title">活动</view>
+    <button class="head-btn" bindtap="goService">预约</button>
+  </view>
+
+  <scroll-view class="poster-strip" scroll-x show-scrollbar="{{false}}">
+    <image wx:for="{{posters}}" wx:key="*this" class="poster-thumb" src="{{item}}" mode="aspectFill"></image>
+  </scroll-view>
+
+  <view class="campaign tech-card">
+    <view class="campaign-k">JUNE SERVICE</view>
+    <view class="campaign-title">清灰换脂 ¥50</view>
+    <view class="campaign-copy">附加保养当前赠送</view>
+  </view>
+
+  <view class="mini-grid">
+    <view class="mini-card tech-card">
+      <view class="mini-value">21</view>
+      <view class="mini-label">宿舍楼覆盖</view>
+    </view>
+    <view class="mini-card tech-card">
+      <view class="mini-value">3</view>
+      <view class="mini-label">每日时段</view>
+    </view>
+    <view class="mini-card tech-card">
+      <view class="mini-value">4</view>
+      <view class="mini-label">每段名额</view>
+    </view>
+  </view>
+</view>

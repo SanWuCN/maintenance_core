@@ -1,0 +1,50 @@
+<view class="page-shell flow-page">
+  <view class="step-line">
+    <text class="step done">服务</text>
+    <text class="step done">时间</text>
+    <text class="step done">设备</text>
+    <text class="step active">宿舍</text>
+  </view>
+
+  <view class="title-block">
+    <view class="section-title">选择宿舍楼</view>
+    <view class="muted">目前覆盖 21 栋宿舍楼，交接精确到楼下。</view>
+  </view>
+
+  <view class="tech-card profile-card">
+    <view>
+      <view class="profile-title">常用宿舍楼</view>
+      <view class="profile-copy">{{savedDorm ? savedDorm + ' 已保存，可直接使用' : '首次预约会保存你的常用宿舍楼'}}</view>
+    </view>
+    <button class="use-btn" wx:if="{{savedDorm}}" bindtap="useSavedDorm">使用</button>
+  </view>
+
+  <view class="tech-card dorm-card">
+    <view class="block-title">宿舍楼</view>
+    <view class="dorm-grid">
+      <view
+        wx:for="{{dorms}}"
+        wx:key="*this"
+        class="dorm-chip {{selectedDorm === item ? 'selected' : ''}}"
+        data-dorm="{{item}}"
+        bindtap="selectDorm"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <view class="tech-card form-card">
+    <view class="block-title">联系方式</view>
+    <input class="text-input" placeholder="姓名 / 称呼" value="{{contactName}}" bindinput="onName" />
+    <input class="text-input" type="number" placeholder="手机号或微信号" value="{{contactPhone}}" bindinput="onPhone" />
+    <textarea class="textarea" placeholder="补充说明，如楼下具体交接点、方便联系时间" value="{{addressNote}}" bindinput="onNote" />
+  </view>
+
+  <view class="tech-card delivery-card">
+    <view class="block-title">交付说明</view>
+    <view class="delivery-row">我们去宿舍楼下取机，不进入宿舍。</view>
+    <view class="delivery-row">清完后送到同一宿舍楼下交接。</view>
+    <view class="delivery-row">全程视频记录，关键步骤可发送给顾客确认。</view>
+  </view>
+
+  <button class="primary-btn bottom-action" bindtap="next">下一步：确认预约</button>
+</view>

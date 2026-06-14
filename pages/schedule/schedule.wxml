@@ -1,0 +1,55 @@
+<view class="page-shell flow-page">
+  <view class="step-line">
+    <text class="step done">服务</text>
+    <text class="step active">时间</text>
+    <text class="step">设备</text>
+    <text class="step">宿舍</text>
+  </view>
+
+  <view class="title-block">
+    <view class="section-title">选择预约时间</view>
+    <view class="muted">每日三个服务时间段，每个时间段最多 4 单。</view>
+  </view>
+
+  <scroll-view class="date-strip" scroll-x show-scrollbar="{{false}}">
+    <view
+      wx:for="{{dates}}"
+      wx:key="value"
+      class="date-item {{selectedDate === item.value ? 'selected' : ''}}"
+      data-value="{{item.value}}"
+      bindtap="selectDate"
+    >
+      <view class="date-week">{{item.week}}</view>
+      <view class="date-day">{{item.day}}</view>
+      <view class="date-label">{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="slot-list">
+    <view
+      wx:for="{{slots}}"
+      wx:key="id"
+      class="slot-card tech-card {{selectedSlotId === item.id ? 'selected' : ''}} {{item.remaining === 0 ? 'disabled' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="selectSlot"
+    >
+      <view>
+        <view class="slot-time">{{item.time}}</view>
+        <view class="slot-copy">{{item.copy}}</view>
+      </view>
+      <view class="slot-right">
+        <view class="remaining">余 {{item.remaining}}/4</view>
+        <view class="slot-dot"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="rule-card tech-card">
+    <view class="rule-title">预约规则</view>
+    <view class="rule-row">请提前 10 分钟到宿舍楼下交接。</view>
+    <view class="rule-row">如需取消，请提前 2 小时联系处理。</view>
+    <view class="rule-row">清灰过程默认录制关键步骤视频。</view>
+  </view>
+
+  <button class="primary-btn bottom-action" bindtap="next">下一步：填写设备</button>
+</view>

@@ -1,0 +1,66 @@
+<view class="page-shell confirm-page">
+  <view class="title-block">
+    <view class="section-title">核对预约信息</view>
+    <view class="muted">确认无误后提交预约，我们会按联系方式确认取机。</view>
+  </view>
+
+  <view class="summary-card tech-card">
+    <view class="summary-head">
+      <view>
+        <view class="summary-title">{{booking.service.name}}</view>
+        <view class="summary-sub">SW.ART CORE 校园清灰维护</view>
+      </view>
+      <view class="summary-price">¥{{booking.service.price}}</view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="summary-row">
+      <text class="label">预约时间</text>
+      <text class="value">{{booking.schedule.dateText}} {{booking.schedule.slotTime}}</text>
+    </view>
+    <view class="summary-row">
+      <text class="label">设备型号</text>
+      <text class="value">{{booking.device.brand}} · {{booking.device.finalModel}}</text>
+    </view>
+    <view class="summary-row">
+      <text class="label">宿舍楼</text>
+      <text class="value">{{booking.dorm.dorm}}</text>
+    </view>
+    <view class="summary-row">
+      <text class="label">联系方式</text>
+      <text class="value">{{booking.dorm.contactName}} {{booking.dorm.contactPhone}}</text>
+    </view>
+    <view class="summary-row" wx:if="{{booking.device.note}}">
+      <text class="label">设备备注</text>
+      <text class="value">{{booking.device.note}}</text>
+    </view>
+    <view class="summary-row" wx:if="{{booking.dorm.addressNote}}">
+      <text class="label">交接备注</text>
+      <text class="value">{{booking.dorm.addressNote}}</text>
+    </view>
+  </view>
+
+  <view class="gift-card tech-card">
+    <view class="gift-title">已包含免费附加服务</view>
+    <view wx:for="{{booking.addons}}" wx:key="name" class="gift-row">
+      <text>{{item.name}}</text>
+      <view>
+        <text class="old-price">+{{item.oldPrice}} RMB</text>
+        <text class="free-price"> 0 RMB</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="promise-card tech-card">
+    <view class="promise-title">交付承诺</view>
+    <view class="promise-row">楼下取送，不进入宿舍。</view>
+    <view class="promise-row">清灰维护全程视频记录。</view>
+    <view class="promise-row">如发现异常硬件问题，先沟通再处理。</view>
+  </view>
+
+  <view class="action-row">
+    <button class="ghost-btn" bindtap="backEdit">返回修改</button>
+    <button class="primary-btn" bindtap="submit">确认预约</button>
+  </view>
+</view>

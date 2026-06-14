@@ -1,0 +1,39 @@
+<scroll-view class="home page-shell" scroll-y enhanced show-scrollbar="{{false}}">
+  <swiper class="poster-swiper" circular indicator-dots autoplay interval="4200" duration="480">
+    <swiper-item wx:for="{{posters}}" wx:key="*this">
+      <view class="poster-card">
+        <image class="poster-image" src="{{item}}" mode="aspectFill"></image>
+        <view class="poster-fade"></view>
+        <view class="business-glass">
+          <view class="business-item active" bindtap="goService">
+            <view class="business-icon fan"></view>
+            <view class="business-title">清灰维护</view>
+          </view>
+          <view class="business-item" bindtap="comingSoon">
+            <view class="business-icon chip"></view>
+            <view class="business-title">硬件升级</view>
+          </view>
+          <view class="business-item" bindtap="comingSoon">
+            <view class="business-icon tune"></view>
+            <view class="business-title">系统优化</view>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="assurance">
+    <view class="assurance-item">
+      <view class="assurance-k">记录</view>
+      <view class="assurance-v">全程视频</view>
+    </view>
+    <view class="assurance-item">
+      <view class="assurance-k">取送</view>
+      <view class="assurance-v">宿舍楼下</view>
+    </view>
+    <view class="assurance-item">
+      <view class="assurance-k">透明</view>
+      <view class="assurance-v">先确认</view>
+    </view>
+  </view>
+</scroll-view>
