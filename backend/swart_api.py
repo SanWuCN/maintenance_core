@@ -36,10 +36,12 @@ SERVICES = [
 ]
 
 ADDONS = [
-    {"name": "屏幕深度清洁", "oldPrice": 8},
-    {"name": "键盘表面保养", "oldPrice": 6},
-    {"name": "USB / 接口除尘", "oldPrice": 5},
-    {"name": "外壳指纹清理", "oldPrice": 5},
+    {"id": "screen", "name": "屏幕清洁", "oldPrice": 8, "price": 0, "free": True},
+    {"id": "keyboard", "name": "键盘清洁", "oldPrice": 6, "price": 0, "free": True},
+    {"id": "ports", "name": "接口除尘", "oldPrice": 5, "price": 0, "free": True},
+    {"id": "shell", "name": "外壳清理", "oldPrice": 5, "price": 0, "free": True},
+    {"id": "system", "name": "系统优化", "price": 10},
+    {"id": "benchmark", "name": "跑分测试", "price": 5},
 ]
 
 SLOTS = [
@@ -360,6 +362,8 @@ def create_order(payload):
     dorm = payload.get("dorm") or {}
     user = payload.get("user") or {}
     user_id = payload.get("userId") or user.get("userId") or ""
+    selected_addons = payload.get("addons") or []
+    grease = payload.get("grease")
 
     service_data = service_by_id(service.get("id") or service.get("service_id"))
     slot_data = slot_by_id(schedule.get("slotId") or schedule.get("slot_id"))
@@ -382,11 +386,19 @@ def create_order(payload):
     if booked >= MAX_PER_SLOT:
         return 409, {"ok": False, "message": "该时间段已约满，请选择其他时间"}
 
+    base_price = int(service_data["price"])
+    addons_price = sum(int(item.get("price") or 0) for item in selected_addons)
+    grease_price = int((grease or {}).get("price") or 0) if service_data["id"] == "combo" else 0
+    requested_total = int(payload.get("totalPrice") or service.get("totalPrice") or 0)
+    total_price = max(base_price + addons_price + grease_price, requested_total, base_price)
+
     order_no = f"SW{datetime.now().strftime('%Y%m%d')}{uuid.uuid4().hex[:8].upper()}"
     now = int(time.time())
     normalized = {
-        "service": service_data,
-        "addons": payload.get("addons") or ADDONS,
+        "service": {**service_data, "totalPrice": total_price},
+        "addons": selected_addons,
+        "grease": grease if service_data["id"] == "combo" else None,
+        "totalPrice": total_price,
         "schedule": {
             "dateValue": appointment_date,
             "dateText": schedule.get("dateText") or appointment_date,
@@ -417,7 +429,7 @@ def create_order(payload):
                 order_no,
                 service_data["id"],
                 service_data["name"],
-                service_data["price"],
+                total_price,
                 appointment_date,
                 slot_data["id"],
                 slot_data["time"],
@@ -432,12 +444,12 @@ def create_order(payload):
                 now,
             ),
         )
-        updated_user = award_points(conn, user_id, service_data["price"])
+        updated_user = award_points(conn, user_id, total_price)
     return 201, {
         "ok": True,
         "orderNo": order_no,
         "order": {**normalized, "status": "待确认", "createdAt": now},
-        "awardedPoints": service_data["price"] * 10 if updated_user else 0,
+        "awardedPoints": total_price * 10 if updated_user else 0,
         "user": updated_user,
     }
 

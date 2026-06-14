@@ -1,10 +1,13 @@
 .flow-page {
-  padding-bottom: 48rpx;
+  min-height: 100vh;
+  padding-bottom: 158rpx;
+  background: #f4f4f2;
+  box-sizing: border-box;
 }
 
 .step-line {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 10rpx;
   margin-bottom: 34rpx;
 }
@@ -122,6 +125,17 @@
 
 .bottom-action {
   width: 100%;
-  margin-top: 28rpx;
+  box-sizing: border-box;
+}
+
+.fixed-action {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18rpx 28rpx calc(18rpx + env(safe-area-inset-bottom));
+  background: rgba(244, 244, 242, 0.96);
+  box-shadow: 0 -12rpx 34rpx rgba(20, 20, 20, 0.08);
   box-sizing: border-box;
 }

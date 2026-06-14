@@ -1,5 +1,32 @@
 .confirm-page {
-  padding-bottom: 48rpx;
+  min-height: 100vh;
+  padding-bottom: 166rpx;
+  background: #f4f4f2;
+  box-sizing: border-box;
+}
+
+.step-line {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10rpx;
+  margin-bottom: 34rpx;
+}
+
+.step {
+  height: 52rpx;
+  line-height: 52rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #9a9a9a;
+  text-align: center;
+  font-size: 22rpx;
+  border: 1rpx solid #e8e8e3;
+}
+
+.step.active,
+.step.done {
+  background: #111111;
+  color: #ffffff;
 }
 
 .title-block {
@@ -96,5 +123,16 @@
   display: grid;
   grid-template-columns: 210rpx 1fr;
   gap: 16rpx;
-  margin-top: 28rpx;
+}
+
+.fixed-action {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18rpx 28rpx calc(18rpx + env(safe-area-inset-bottom));
+  background: rgba(244, 244, 242, 0.96);
+  box-shadow: 0 -12rpx 34rpx rgba(20, 20, 20, 0.08);
+  box-sizing: border-box;
 }

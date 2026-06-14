@@ -1,20 +1,36 @@
 <view class="page-shell confirm-page">
+  <view class="step-line">
+    <text class="step done">服务</text>
+    <text class="step done">时间</text>
+    <text class="step done">设备</text>
+    <text class="step done">地址</text>
+    <text class="step active">确认</text>
+  </view>
+
   <view class="title-block">
-    <view class="section-title">核对预约信息</view>
-    <view class="muted">确认无误后提交预约，我们会按联系方式确认取机。</view>
+    <view class="section-title">确认订单</view>
+    <view class="muted">核对无误后再付款预定。</view>
   </view>
 
   <view class="summary-card tech-card">
     <view class="summary-head">
       <view>
         <view class="summary-title">{{booking.service.name}}</view>
-        <view class="summary-sub">三物IT小屋 校园清灰维护</view>
+        <view class="summary-sub">{{booking.service.desc}}</view>
       </view>
-      <view class="summary-price">¥{{booking.service.price}}</view>
+      <view class="summary-price">¥{{totalPrice}}</view>
     </view>
 
     <view class="divider"></view>
 
+    <view class="summary-row">
+      <text class="label">主项目</text>
+      <text class="value">{{booking.service.name}} · ¥{{booking.service.price}}</text>
+    </view>
+    <view class="summary-row" wx:if="{{booking.grease}}">
+      <text class="label">硅脂</text>
+      <text class="value">{{booking.grease.finalName}} · +{{booking.grease.price}} RMB</text>
+    </view>
     <view class="summary-row">
       <text class="label">预约时间</text>
       <text class="value">{{booking.schedule.dateText}} {{booking.schedule.slotTime}}</text>
@@ -24,7 +40,7 @@
       <text class="value">{{booking.device.brand}} · {{booking.device.finalModel}}</text>
     </view>
     <view class="summary-row">
-      <text class="label">宿舍楼</text>
+      <text class="label">地址</text>
       <text class="value">{{booking.dorm.dorm}}</text>
     </view>
     <view class="summary-row">
@@ -41,26 +57,27 @@
     </view>
   </view>
 
-  <view class="gift-card tech-card">
-    <view class="gift-title">已包含免费附加服务</view>
+  <view class="gift-card tech-card" wx:if="{{hasAddons}}">
+    <view class="gift-title">附加服务</view>
     <view wx:for="{{booking.addons}}" wx:key="name" class="gift-row">
       <text>{{item.name}}</text>
       <view>
-        <text class="old-price">+{{item.oldPrice}} RMB</text>
-        <text class="free-price"> 0 RMB</text>
+        <text wx:if="{{item.free}}" class="old-price">+{{item.oldPrice}} RMB</text>
+        <text wx:if="{{item.free}}" class="free-price"> 0 RMB</text>
+        <text wx:else class="free-price">+{{item.price}} RMB</text>
       </view>
     </view>
   </view>
 
   <view class="promise-card tech-card">
     <view class="promise-title">交付承诺</view>
-    <view class="promise-row">楼下取送，不进入宿舍。</view>
+    <view class="promise-row">配送形式：楼下取机，楼下送回。</view>
     <view class="promise-row">清灰维护全程视频记录。</view>
     <view class="promise-row">如发现异常硬件问题，先沟通再处理。</view>
   </view>
 
-  <view class="action-row">
+  <view class="fixed-action action-row" wx:if="{{actionReady}}">
     <button class="ghost-btn" bindtap="backEdit">返回修改</button>
-    <button class="primary-btn" bindtap="submit">确认预约</button>
+    <button class="primary-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">付款预定</button>
   </view>
 </view>

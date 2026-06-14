@@ -3,7 +3,8 @@
     <text class="step done">服务</text>
     <text class="step done">时间</text>
     <text class="step active">设备</text>
-    <text class="step">宿舍</text>
+    <text class="step">地址</text>
+    <text class="step">确认</text>
   </view>
 
   <view class="title-block">
@@ -46,5 +47,7 @@
     <textarea class="textarea" placeholder="可填写温度高、异响、进灰严重、多久没清灰等情况" value="{{deviceNote}}" bindinput="onNote" />
   </view>
 
-  <button class="primary-btn bottom-action" bindtap="next">下一步：填写宿舍楼</button>
+  <view class="fixed-action" wx:if="{{actionReady}}">
+    <button class="primary-btn bottom-action" loading="{{navigating}}" disabled="{{navigating}}" bindtap="next">下一步：填写地址</button>
+  </view>
 </view>

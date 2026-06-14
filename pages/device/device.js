@@ -2,6 +2,8 @@ const app = getApp()
 
 Page({
   data: {
+    actionReady: false,
+    navigating: false,
     brands: ['联想', '华硕', '戴尔', '惠普', '苹果', '华为', '小米', '机械革命', '神舟', '其他'],
     selectedBrand: '联想',
     selectedModel: '',
@@ -33,6 +35,9 @@ Page({
       deviceNote: saved.note || ''
     })
   },
+  onReady() {
+    this.setData({ actionReady: true })
+  },
   selectBrand(e) {
     const selectedBrand = e.currentTarget.dataset.brand
     const models = this.data.modelMap[selectedBrand]
@@ -54,6 +59,7 @@ Page({
     this.setData({ deviceNote: e.detail.value })
   },
   next() {
+    if (this.data.navigating) return
     const finalModel = this.data.customModel || this.data.selectedModel
     if (!finalModel) {
       wx.showToast({
@@ -72,8 +78,12 @@ Page({
         note: this.data.deviceNote
       }
     }
+    this.setData({ navigating: true })
     wx.navigateTo({
-      url: '/pages/dorm/dorm'
+      url: '/pages/dorm/dorm',
+      complete: () => {
+        this.setData({ navigating: false })
+      }
     })
   }
 })

@@ -5,6 +5,8 @@ const pad = number => (number < 10 ? `0${number}` : `${number}`)
 
 Page({
   data: {
+    actionReady: false,
+    navigating: false,
     dates: [],
     selectedDate: '',
     selectedSlotId: '',
@@ -20,6 +22,9 @@ Page({
       selectedSlotId: saved.slotId || ''
     })
     this.refreshSlots(selectedDate)
+  },
+  onReady() {
+    this.setData({ actionReady: true })
   },
   createDates() {
     const weekMap = ['日', '一', '二', '三', '四', '五', '六']
@@ -72,6 +77,7 @@ Page({
     this.setData({ selectedSlotId: slot.id })
   },
   next() {
+    if (this.data.navigating) return
     const date = this.data.dates.find(item => item.value === this.data.selectedDate)
     const slot = this.data.slots.find(item => item.id === this.data.selectedSlotId)
     if (!slot) {
@@ -91,8 +97,12 @@ Page({
         remaining: slot.remaining
       }
     }
+    this.setData({ navigating: true })
     wx.navigateTo({
-      url: '/pages/device/device'
+      url: '/pages/device/device',
+      complete: () => {
+        this.setData({ navigating: false })
+      }
     })
   }
 })

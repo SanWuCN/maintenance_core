@@ -3,12 +3,13 @@
     <text class="step active">服务</text>
     <text class="step">时间</text>
     <text class="step">设备</text>
-    <text class="step">宿舍</text>
+    <text class="step">地址</text>
+    <text class="step">确认</text>
   </view>
 
   <view class="title-block">
-    <view class="section-title">选择清灰维护项目</view>
-    <view class="muted">先选主服务，附加保养默认赠送。</view>
+    <view class="section-title">选择项目</view>
+    <view class="muted">先选主服务，再按需勾选附加项。</view>
   </view>
 
   <view class="service-list">
@@ -36,22 +37,53 @@
   <view class="addon-panel tech-card">
     <view class="addon-head">
       <view class="addon-title">附加服务</view>
-      <view class="addon-note">默认包含 · 当前免费</view>
+      <view class="addon-note">可自由勾选</view>
     </view>
-    <view wx:for="{{addons}}" wx:key="name" class="addon-row">
-      <view class="addon-check"></view>
+    <view wx:for="{{addons}}" wx:key="id" class="addon-row" data-id="{{item.id}}" bindtap="toggleAddon">
+      <view class="addon-check {{item.selected ? 'checked' : ''}}"></view>
       <view class="addon-name">{{item.name}}</view>
       <view class="addon-price">
-        <text class="old-price">+{{item.oldPrice}} RMB</text>
-        <text class="free-price">0 RMB</text>
+        <text wx:if="{{item.free}}" class="old-price">+{{item.oldPrice}} RMB</text>
+        <text wx:if="{{item.free}}" class="free-price">0 RMB</text>
+        <text wx:else class="paid-price">+{{item.price}} RMB</text>
       </view>
     </view>
   </view>
 
-  <view class="notice tech-card">
-    <view class="notice-title">配送形式</view>
-    <view class="notice-copy">我们到宿舍楼下取机，清理完成后送回楼下；清灰过程全程视频记录。</view>
+  <view wx:if="{{selectedServiceId === 'combo'}}" class="grease-panel tech-card">
+    <view class="addon-head">
+      <view class="addon-title">选择硅脂</view>
+      <view class="addon-note">清灰换脂可选</view>
+    </view>
+    <view
+      wx:for="{{greases}}"
+      wx:key="id"
+      class="grease-row {{selectedGreaseId === item.id ? 'selected' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="selectGrease"
+    >
+      <view>
+        <view class="grease-name">{{item.name}} <text wx:if="{{item.tag}}" class="grease-tag">{{item.tag}}</text></view>
+        <input
+          wx:if="{{item.custom && selectedGreaseId === item.id}}"
+          class="grease-input"
+          placeholder="填写硅脂 / 相变片名称"
+          value="{{customGrease}}"
+          bindinput="onCustomGrease"
+          catchtap="noop"
+        />
+      </view>
+      <view wx:if="{{item.price}}" class="grease-price">+{{item.price}} RMB</view>
+      <view wx:else class="grease-price">+0 RMB</view>
+      <view class="grease-dot"></view>
+    </view>
   </view>
 
-  <button class="primary-btn bottom-action" bindtap="next">下一步：预约时间</button>
+  <view class="fixed-action" wx:if="{{actionReady}}">
+    <view class="action-total">
+      <text>合计</text>
+      <text class="total-price">¥{{totalPrice}}</text>
+    </view>
+    <button class="primary-btn bottom-action" loading="{{navigating}}" disabled="{{navigating}}" bindtap="next">下一步：预约时间</button>
+  </view>
 </view>

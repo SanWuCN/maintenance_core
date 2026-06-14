@@ -2,6 +2,8 @@ const app = getApp()
 
 Page({
   data: {
+    actionReady: false,
+    navigating: false,
     dorms: [],
     savedDorm: '',
     selectedDorm: '',
@@ -23,6 +25,9 @@ Page({
       addressNote: saved.addressNote || ''
     })
   },
+  onReady() {
+    this.setData({ actionReady: true })
+  },
   useSavedDorm() {
     this.setData({ selectedDorm: this.data.savedDorm })
   },
@@ -39,6 +44,7 @@ Page({
     this.setData({ addressNote: e.detail.value })
   },
   next() {
+    if (this.data.navigating) return
     if (!this.data.selectedDorm) {
       wx.showToast({
         title: '请选择宿舍楼',
@@ -67,8 +73,12 @@ Page({
         addressNote: this.data.addressNote
       }
     }
+    this.setData({ navigating: true })
     wx.navigateTo({
-      url: '/pages/confirm/confirm'
+      url: '/pages/confirm/confirm',
+      complete: () => {
+        this.setData({ navigating: false })
+      }
     })
   }
 })
