@@ -12,30 +12,94 @@
   bottom: 0;
   background: #f4f4f2;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24rpx;
 }
 
-.boot-mark {
-  width: 86rpx;
-  height: 86rpx;
-  border-radius: 24rpx;
-  background: #111111;
-  color: #ffffff;
-  line-height: 86rpx;
-  text-align: center;
-  font-size: 26rpx;
-  font-weight: 800;
-  letter-spacing: 1rpx;
+.boot-stage {
+  position: relative;
+  width: 178rpx;
+  height: 220rpx;
 }
 
-.boot-line {
-  width: 120rpx;
-  height: 4rpx;
+.boot-logo {
+  position: absolute;
+  left: 23rpx;
+  top: 8rpx;
+  width: 132rpx;
+  height: 132rpx;
+  transform-origin: 50% 82%;
+  animation: boot-hop-roll 2150ms cubic-bezier(0.18, 0.88, 0.22, 1) infinite;
+}
+
+.boot-shadow {
+  position: absolute;
+  left: 45rpx;
+  bottom: 38rpx;
+  width: 88rpx;
+  height: 10rpx;
   border-radius: 999rpx;
-  background: linear-gradient(90deg, rgba(17, 17, 17, 0.08), rgba(17, 17, 17, 0.75), rgba(17, 17, 17, 0.08));
+  background: radial-gradient(ellipse at center, rgba(12, 12, 12, 0.28) 0%, rgba(12, 12, 12, 0.16) 42%, rgba(12, 12, 12, 0) 76%);
+  transform-origin: 50% 50%;
+  animation: boot-shadow-pulse 2150ms cubic-bezier(0.18, 0.88, 0.22, 1) infinite;
+}
+
+@keyframes boot-hop-roll {
+  0% {
+    transform: translate3d(-8rpx, -132rpx, 0) rotate(-32deg) scale(1);
+  }
+  16% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.08, 0.92);
+  }
+  24% {
+    transform: translate3d(0, -18rpx, 0) rotate(10deg) scale(0.96, 1.04);
+  }
+  42% {
+    transform: translate3d(15rpx, -86rpx, 0) rotate(74deg) scale(1);
+  }
+  58% {
+    transform: translate3d(24rpx, 0, 0) rotate(136deg) scale(1.05, 0.95);
+  }
+  70% {
+    transform: translate3d(18rpx, -28rpx, 0) rotate(166deg) scale(0.98, 1.02);
+  }
+  84% {
+    transform: translate3d(0, 0, 0) rotate(180deg) scale(1.03, 0.97);
+  }
+  100% {
+    transform: translate3d(-8rpx, -132rpx, 0) rotate(328deg) scale(1);
+  }
+}
+
+@keyframes boot-shadow-pulse {
+  0% {
+    opacity: 0.06;
+    transform: scale(0.42, 0.7);
+  }
+  16% {
+    opacity: 0.34;
+    transform: scale(1.08, 1);
+  }
+  42% {
+    opacity: 0.12;
+    transform: translateX(14rpx) scale(0.58, 0.78);
+  }
+  58% {
+    opacity: 0.3;
+    transform: translateX(24rpx) scale(1, 0.92);
+  }
+  70% {
+    opacity: 0.18;
+    transform: translateX(18rpx) scale(0.74, 0.82);
+  }
+  84% {
+    opacity: 0.3;
+    transform: scale(0.94, 0.92);
+  }
+  100% {
+    opacity: 0.06;
+    transform: scale(0.42, 0.7);
+  }
 }
 
 .home {

@@ -1,7 +1,9 @@
 <view class="home-wrap">
   <view wx:if="{{!heroReady}}" class="boot-screen">
-    <view class="boot-mark">SW</view>
-    <view class="boot-line"></view>
+    <view class="boot-stage">
+      <image class="boot-logo" src="{{bootLogo}}" mode="aspectFit"></image>
+      <view class="boot-shadow"></view>
+    </view>
   </view>
 
   <scroll-view class="home page-shell {{heroReady ? 'home-ready' : 'home-hidden'}}" scroll-y enhanced show-scrollbar="{{false}}">

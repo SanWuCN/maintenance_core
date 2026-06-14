@@ -3,6 +3,7 @@ const api = require('../../utils/api.js')
 Page({
   data: {
     heroReady: false,
+    bootLogo: `${api.ASSET_URL}/app-icon-boot-transparent.png`,
     posters: shuffle([
       `${api.ASSET_URL}/poster-home-3x4.png`,
       `${api.ASSET_URL}/poster-service-500-3x4.png`
