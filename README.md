@@ -10,7 +10,9 @@
 
 ## 当前部署
 
-- API：`https://appruya.top:40208/swart-api`
-- 静态资源：`https://appruya.top:40208/swart-assets`
+- API：`https://101.133.166.150:40208/swart-api`
+- 静态资源：`https://101.133.166.150:40208/swart-assets`
 
 服务器已配置 Nginx 监听 `40208`，需要在阿里云安全组放行 `40208/TCP` 后才能从公网访问。
+
+当前地址用于开发调试。正式上线小程序时，需要替换为已备案域名或微信云托管/对象存储提供的合法 HTTPS 域名。

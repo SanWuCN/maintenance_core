@@ -1,5 +1,5 @@
-const BASE_URL = 'https://appruya.top:40208/swart-api'
-const ASSET_URL = 'https://appruya.top:40208/swart-assets'
+const BASE_URL = 'https://101.133.166.150:40208/swart-api'
+const ASSET_URL = 'https://101.133.166.150:40208/swart-assets'
 
 const request = (path, options = {}) => {
   return new Promise((resolve, reject) => {
