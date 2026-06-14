@@ -16,6 +16,8 @@ Page({
       nextName: '入门IT',
       needPoints: 1000
     },
+    showLevelProgress: true,
+    progressStyle: 'width: 0%;',
 
     // 预约动态卡片数据 (为 null 时自动隐藏)
     activeAppointment: {
@@ -32,6 +34,8 @@ Page({
     const orders = wx.getStorageSync('orders') || []
     const nickName = userSession.nickName || userInfo.nickName || ''
     const avatarUrl = userSession.avatarUrl || userInfo.avatarUrl || ''
+    const levelInfo = userSession.levelInfo || this.calculateLevel(userSession.points || 0)
+    const levelViewState = this.getLevelViewState(levelInfo)
 
     this.setData({
       userInfo: {
@@ -44,7 +48,8 @@ Page({
       points: userSession.points || 0,
       cardsCount: userSession.cardsCount || 0,
       couponsCount: userSession.couponsCount || 0,
-      levelInfo: userSession.levelInfo || this.calculateLevel(userSession.points || 0),
+      levelInfo,
+      ...levelViewState,
       activeAppointment: this.getActiveAppointment(orders),
       orders
     })
@@ -62,6 +67,8 @@ Page({
         }
         const user = res.user
         const orders = res.orders || []
+        const levelInfo = user.levelInfo || this.calculateLevel(user.points || 0)
+        const levelViewState = this.getLevelViewState(levelInfo)
         wx.setStorageSync('userSession', user)
         wx.setStorageSync('userInfo', {
           nickName: user.nickName,
@@ -78,7 +85,8 @@ Page({
           points: user.points || 0,
           cardsCount: user.cardsCount || 0,
           couponsCount: user.couponsCount || 0,
-          levelInfo: user.levelInfo || this.calculateLevel(user.points || 0),
+          levelInfo,
+          ...levelViewState,
           activeAppointment: this.getActiveAppointment(orders),
           orders
         })
@@ -109,6 +117,14 @@ Page({
         nextName: 'MAX',
         needPoints: 0
       }
+    }
+  },
+
+  getLevelViewState(levelInfo) {
+    const percent = Math.max(0, Math.min(100, Number(levelInfo.percent) || 0))
+    return {
+      showLevelProgress: levelInfo.name !== 'IT Goal',
+      progressStyle: `width: ${percent}%;`
     }
   },
 

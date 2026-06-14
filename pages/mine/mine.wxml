@@ -34,9 +34,9 @@
         </view>
       </view>
 
-      <view class="level-progress-bar" wx:if="{{levelInfo.name !== 'IT Goal'}}">
+      <view class="level-progress-bar" wx:if="{{showLevelProgress}}">
         <view class="progress-track">
-          <view class="progress-fill" style="width: {{levelInfo.percent}}%"></view>
+          <view class="progress-fill" style="{{progressStyle}}"></view>
         </view>
         <view class="progress-hint">距离 {{levelInfo.nextName}} 还需 {{levelInfo.needPoints}} 积分</view>
       </view>
