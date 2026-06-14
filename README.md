@@ -13,6 +13,7 @@
 - API：`https://101.133.166.150:40208/swart-api`
 - 静态资源：`https://101.133.166.150:40208/swart-assets`
 - 应用图标素材：`https://101.133.166.150:40208/swart-assets/app-icon-1024.png`
+- 首页第二张海报：`https://101.133.166.150:40208/swart-assets/poster-service-500-3x4.png`
 
 服务器已配置 Nginx 监听 `40208`，需要在阿里云安全组放行 `40208/TCP` 后才能从公网访问。
 

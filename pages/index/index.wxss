@@ -18,7 +18,6 @@
   background: #e8e8e4;
 }
 
-.poster-image,
 .poster-image {
   position: absolute;
   left: 0;
@@ -37,91 +36,119 @@
 }
 
 .business-item {
-  height: 180rpx;
-  border-radius: 22rpx;
-  border: 1rpx solid rgba(20, 20, 20, 0.06);
-  background: rgba(255, 255, 255, 0.86);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16rpx;
-  color: #191919;
-  box-shadow: 0 12rpx 28rpx rgba(15, 15, 15, 0.05);
-}
-
-.business-item.active {
-  background: #111111;
-  color: #ffffff;
-}
-
-.business-icon {
-  width: 38rpx;
-  height: 38rpx;
   position: relative;
+  height: 172rpx;
+  padding: 28rpx 18rpx;
+  border-radius: 22rpx;
+  border: 1rpx solid rgba(20, 20, 20, 0.07);
+  background: rgba(255, 255, 255, 0.92);
+  color: #111111;
+  box-shadow: 0 12rpx 30rpx rgba(15, 15, 15, 0.06);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
 }
 
-.business-icon.fan {
-  border: 4rpx solid currentColor;
-  border-radius: 50%;
-}
-
-.business-icon.fan::after {
+.business-item::before,
+.business-item::after {
   content: "";
   position: absolute;
-  left: 11rpx;
-  top: 11rpx;
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 -13rpx 0 -2rpx currentColor, 12rpx 7rpx 0 -2rpx currentColor, -12rpx 7rpx 0 -2rpx currentColor;
+  pointer-events: none;
 }
 
-.business-icon.chip {
-  border: 4rpx solid currentColor;
-  border-radius: 8rpx;
-}
-
-.business-icon.chip::after {
-  content: "";
-  position: absolute;
-  left: -8rpx;
-  right: -8rpx;
+.business-item::before {
   top: 12rpx;
-  height: 4rpx;
+  left: 18rpx;
+  width: 42rpx;
+  height: 6rpx;
   background: currentColor;
-  box-shadow: 0 10rpx 0 currentColor;
+  transform: skewX(-28deg);
 }
 
-.business-icon.tune::before,
-.business-icon.tune::after {
-  content: "";
-  position: absolute;
-  left: 2rpx;
-  right: 2rpx;
-  height: 4rpx;
+.business-item::after {
+  right: 12rpx;
+  top: 14rpx;
+  width: 82rpx;
+  height: 56rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.12);
+  border-right: 1rpx solid rgba(0, 0, 0, 0.12);
+  transform: skewX(-18deg);
+}
+
+.business-item-pressed {
+  background: #151515;
+  color: #ffffff;
+  transform: translateY(3rpx) scale(0.985);
+  box-shadow: 0 8rpx 20rpx rgba(15, 15, 15, 0.18);
+}
+
+.business-item-pressed::after {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.business-mark {
+  width: 26rpx;
+  height: 5rpx;
+  margin-bottom: 22rpx;
   border-radius: 999rpx;
   background: currentColor;
 }
 
-.business-icon.tune::before {
-  top: 10rpx;
-  box-shadow: 0 16rpx 0 currentColor;
-}
-
-.business-icon.tune::after {
-  top: 5rpx;
-  left: 21rpx;
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  box-shadow: -18rpx 16rpx 0 currentColor;
-}
-
 .business-title {
-  font-size: 24rpx;
-  font-weight: 600;
+  font-size: 28rpx;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.business-desc {
+  margin-top: 10rpx;
+  color: #777777;
+  font-size: 19rpx;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.business-item-pressed .business-desc {
+  color: #cfcfcf;
+}
+
+.business-deco {
+  position: absolute;
+  left: 18rpx;
+  bottom: 18rpx;
+  width: 86rpx;
+  height: 8rpx;
+  border-bottom: 2rpx solid rgba(20, 20, 20, 0.18);
+}
+
+.business-deco::before,
+.business-deco::after {
+  content: "";
+  position: absolute;
+  bottom: -2rpx;
+  height: 2rpx;
+  background: rgba(20, 20, 20, 0.28);
+}
+
+.business-deco::before {
+  left: 0;
+  width: 16rpx;
+}
+
+.business-deco::after {
+  right: -42rpx;
+  width: 6rpx;
+  box-shadow: 18rpx 0 0 rgba(20, 20, 20, 0.2), 36rpx 0 0 rgba(20, 20, 20, 0.16);
+}
+
+.business-item-pressed .business-deco {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.business-item-pressed .business-deco::before,
+.business-item-pressed .business-deco::after {
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: 18rpx 0 0 rgba(255, 255, 255, 0.28), 36rpx 0 0 rgba(255, 255, 255, 0.18);
 }
 
 .assurance {

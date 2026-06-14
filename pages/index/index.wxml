@@ -8,17 +8,23 @@
   </swiper>
 
   <view class="business-grid">
-    <view class="business-item active" bindtap="goService">
-      <view class="business-icon fan"></view>
+    <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="goService">
+      <view class="business-mark"></view>
       <view class="business-title">清灰维护</view>
+      <view class="business-desc">风扇除尘 / 深度保养</view>
+      <view class="business-deco"></view>
     </view>
-    <view class="business-item" bindtap="comingSoon">
-      <view class="business-icon chip"></view>
+    <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
+      <view class="business-mark"></view>
       <view class="business-title">硬件升级</view>
+      <view class="business-desc">内存硬盘 / 性能扩展</view>
+      <view class="business-deco"></view>
     </view>
-    <view class="business-item" bindtap="comingSoon">
-      <view class="business-icon tune"></view>
+    <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
+      <view class="business-mark"></view>
       <view class="business-title">系统优化</view>
+      <view class="business-desc">清理加速 / 故障修复</view>
+      <view class="business-deco"></view>
     </view>
   </view>
 
