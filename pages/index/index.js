@@ -2,7 +2,8 @@ const api = require('../../utils/api.js')
 
 const POSTER_URLS = [
   `${api.ASSET_URL}/poster-home-3x4.png`,
-  `${api.ASSET_URL}/poster-service-500-3x4.png`
+  `${api.ASSET_URL}/poster-service-500-3x4.png`,
+  `${api.ASSET_URL}/poster-performance-3x4.jpg`
 ]
 
 Page({
