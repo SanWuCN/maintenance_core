@@ -7,6 +7,7 @@ import uuid
 from datetime import date, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
+from urllib.request import Request, urlopen
 
 
 BASE_DIR = os.environ.get("SWART_BASE_DIR", "/opt/swart-core")
@@ -14,6 +15,8 @@ DB_PATH = os.environ.get("SWART_DB_PATH", os.path.join(BASE_DIR, "data", "swart.
 HOST = os.environ.get("SWART_HOST", "127.0.0.1")
 PORT = int(os.environ.get("SWART_PORT", "3107"))
 MAX_PER_SLOT = int(os.environ.get("SWART_MAX_PER_SLOT", "4"))
+WECHAT_APPID = os.environ.get("WECHAT_APPID", "")
+WECHAT_APP_SECRET = os.environ.get("WECHAT_APP_SECRET", "")
 
 SERVICES = [
     {
@@ -94,6 +97,22 @@ def init_db():
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_slot ON orders(appointment_date, slot_id, status)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_phone ON orders(contact_phone, created_at)")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL UNIQUE,
+                openid TEXT UNIQUE,
+                phone TEXT,
+                nick_name TEXT,
+                avatar_url TEXT,
+                payload TEXT NOT NULL,
+                created_at INTEGER NOT NULL,
+                updated_at INTEGER NOT NULL
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone)")
 
 
 def json_response(handler, status, payload):
@@ -121,6 +140,56 @@ def parse_body(handler):
         return {}
     raw = handler.rfile.read(length)
     return json.loads(raw.decode("utf-8"))
+
+
+def http_json(url, payload=None):
+    if payload is None:
+        with urlopen(url, timeout=8) as response:
+            return json.loads(response.read().decode("utf-8"))
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    request = Request(url, data=body, headers={"Content-Type": "application/json"}, method="POST")
+    with urlopen(request, timeout=8) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def wechat_session(login_code):
+    if not (WECHAT_APPID and WECHAT_APP_SECRET and login_code):
+        return {}
+    url = (
+        "https://api.weixin.qq.com/sns/jscode2session"
+        f"?appid={WECHAT_APPID}&secret={WECHAT_APP_SECRET}&js_code={login_code}&grant_type=authorization_code"
+    )
+    data = http_json(url)
+    if data.get("errcode"):
+        raise RuntimeError(data.get("errmsg") or "jscode2session failed")
+    return data
+
+
+def wechat_access_token():
+    if not (WECHAT_APPID and WECHAT_APP_SECRET):
+        return ""
+    url = (
+        "https://api.weixin.qq.com/cgi-bin/token"
+        f"?grant_type=client_credential&appid={WECHAT_APPID}&secret={WECHAT_APP_SECRET}"
+    )
+    data = http_json(url)
+    if data.get("errcode"):
+        raise RuntimeError(data.get("errmsg") or "access_token failed")
+    return data.get("access_token") or ""
+
+
+def wechat_phone(phone_code):
+    if not (WECHAT_APPID and WECHAT_APP_SECRET and phone_code):
+        return ""
+    token = wechat_access_token()
+    data = http_json(
+        f"https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token={token}",
+        {"code": phone_code},
+    )
+    if data.get("errcode"):
+        raise RuntimeError(data.get("errmsg") or "get phone failed")
+    phone_info = data.get("phone_info") or {}
+    return phone_info.get("purePhoneNumber") or phone_info.get("phoneNumber") or ""
 
 
 def service_by_id(service_id):
@@ -234,6 +303,60 @@ def create_order(payload):
     return 201, {"ok": True, "orderNo": order_no, "order": {**normalized, "status": "待确认", "createdAt": now}}
 
 
+def login_user(payload):
+    login_code = payload.get("loginCode") or ""
+    phone_code = payload.get("phoneCode") or ""
+    profile = payload.get("profile") or {}
+    nick_name = (profile.get("nickName") or "三物用户").strip() or "三物用户"
+    avatar_url = profile.get("avatarUrl") or ""
+    now = int(time.time())
+
+    openid = ""
+    phone = ""
+    try:
+        session = wechat_session(login_code)
+        openid = session.get("openid") or ""
+        phone = wechat_phone(phone_code)
+    except Exception as exc:
+        print(f"wechat login fallback: {exc}", flush=True)
+
+    user_id = openid or f"dev_{uuid.uuid4().hex[:16]}"
+    normalized = {
+        "userId": user_id,
+        "openid": openid,
+        "phone": phone,
+        "nickName": nick_name,
+        "avatarUrl": avatar_url,
+        "registeredAt": now,
+    }
+
+    with connect_db() as conn:
+        existed = None
+        if openid:
+            existed = conn.execute("SELECT user_id, created_at FROM users WHERE openid = ?", (openid,)).fetchone()
+        if existed:
+            user_id = existed["user_id"]
+            normalized["userId"] = user_id
+            normalized["registeredAt"] = existed["created_at"]
+            conn.execute(
+                """
+                UPDATE users
+                SET phone = ?, nick_name = ?, avatar_url = ?, payload = ?, updated_at = ?
+                WHERE user_id = ?
+                """,
+                (phone, nick_name, avatar_url, json.dumps(normalized, ensure_ascii=False), now, user_id),
+            )
+        else:
+            conn.execute(
+                """
+                INSERT INTO users (user_id, openid, phone, nick_name, avatar_url, payload, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (user_id, openid or None, phone, nick_name, avatar_url, json.dumps(normalized, ensure_ascii=False), now, now),
+            )
+    return 200, {"ok": True, "user": normalized}
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "SwartCoreAPI/1.0"
 
@@ -301,6 +424,10 @@ class Handler(BaseHTTPRequestHandler):
             return
         if path == "/api/orders":
             status, response = create_order(payload)
+            json_response(self, status, response)
+            return
+        if path == "/api/users/login":
+            status, response = login_user(payload)
             json_response(self, status, response)
             return
         json_response(self, 404, {"ok": False, "message": "接口不存在"})

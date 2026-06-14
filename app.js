@@ -4,7 +4,6 @@ App({
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-    this.globalData.posterCache = wx.getStorageSync('posterCache') || {}
 
     wx.login({
       success: res => {
@@ -15,7 +14,6 @@ App({
   globalData: {
     userInfo: null,
     loginCode: '',
-    booking: {},
-    posterCache: {}
+    booking: {}
   }
 })

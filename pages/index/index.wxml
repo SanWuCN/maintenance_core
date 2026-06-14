@@ -7,29 +7,20 @@
   </view>
 
   <scroll-view class="home page-shell {{heroReady ? 'home-ready' : 'home-hidden'}}" scroll-y enhanced show-scrollbar="{{false}}">
-    <swiper class="poster-swiper" circular indicator-dots autoplay interval="8400" duration="560">
+    <swiper class="poster-swiper" circular indicator-dots autoplay interval="8000" duration="500">
       <swiper-item wx:for="{{posters}}" wx:key="*this">
         <view class="poster-card">
-          <image
-            class="poster-image"
-            src="{{item}}"
-            mode="aspectFill"
-            data-index="{{index}}"
-            bindload="onPosterLoad"
-            binderror="onPosterError"
-          ></image>
+          <image class="poster-image" src="{{item}}" mode="aspectFill" bindload="onPosterLoad"></image>
         </view>
       </swiper-item>
     </swiper>
 
     <view class="business-grid">
-      <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="goService">
+      <view class="business-item" hover-class="business-item-pressed" hover-start-time="10" bindtap="goService">
         <view class="deco-top-line"></view>
         <view class="deco-top-block"></view>
         <view class="deco-right-lines"></view>
-        <view class="deco-corner-bg">
-          <view class="dot-matrix"></view>
-        </view>
+        <view class="deco-corner-bg"><view class="dot-matrix"></view></view>
         <view class="card-content">
           <view class="business-icon-wrap">
             <image class="business-icon business-icon-dark" src="{{businessIcons.clean}}" mode="aspectFit"></image>
@@ -41,21 +32,18 @@
             <view class="bottom-deco">
               <view class="line-bottom"></view>
               <view class="dots-bottom">
-                <view class="dot"></view>
-                <view class="dot"></view>
-                <view class="dot"></view>
+                <view class="dot"></view><view class="dot"></view><view class="dot"></view>
               </view>
             </view>
           </view>
         </view>
       </view>
-      <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
+
+      <view class="business-item" hover-class="business-item-pressed" bindtap="comingSoon">
         <view class="deco-top-line"></view>
         <view class="deco-top-block"></view>
         <view class="deco-right-lines"></view>
-        <view class="deco-corner-bg">
-          <view class="dot-matrix"></view>
-        </view>
+        <view class="deco-corner-bg"><view class="dot-matrix"></view></view>
         <view class="card-content">
           <view class="business-icon-wrap">
             <image class="business-icon business-icon-dark" src="{{businessIcons.upgrade}}" mode="aspectFit"></image>
@@ -67,21 +55,18 @@
             <view class="bottom-deco">
               <view class="line-bottom"></view>
               <view class="dots-bottom">
-                <view class="dot"></view>
-                <view class="dot"></view>
-                <view class="dot"></view>
+                <view class="dot"></view><view class="dot"></view><view class="dot"></view>
               </view>
             </view>
           </view>
         </view>
       </view>
-      <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
+
+      <view class="business-item" hover-class="business-item-pressed" bindtap="comingSoon">
         <view class="deco-top-line"></view>
         <view class="deco-top-block"></view>
         <view class="deco-right-lines"></view>
-        <view class="deco-corner-bg">
-          <view class="dot-matrix"></view>
-        </view>
+        <view class="deco-corner-bg"><view class="dot-matrix"></view></view>
         <view class="card-content">
           <view class="business-icon-wrap">
             <image class="business-icon business-icon-dark" src="{{businessIcons.optimize}}" mode="aspectFit"></image>
@@ -93,9 +78,7 @@
             <view class="bottom-deco">
               <view class="line-bottom"></view>
               <view class="dots-bottom">
-                <view class="dot"></view>
-                <view class="dot"></view>
-                <view class="dot"></view>
+                <view class="dot"></view><view class="dot"></view><view class="dot"></view>
               </view>
             </view>
           </view>
@@ -103,4 +86,25 @@
       </view>
     </view>
   </scroll-view>
+
+  <view wx:if="{{heroReady && loginPanelVisible}}" class="login-mask">
+    <view class="login-card">
+      <view class="login-title">登录三物IT小屋</view>
+      <view class="login-copy" wx:if="{{loginStep === 'phone'}}">首次使用需要授权微信绑定手机号，用于预约联系和订单查询。</view>
+      <view class="login-copy" wx:else>完善头像和昵称后自动注册账号。</view>
+
+      <block wx:if="{{loginStep === 'phone'}}">
+        <button class="primary-btn login-primary" open-type="getPhoneNumber" bindgetphonenumber="onPhoneLogin">授权手机号登录</button>
+      </block>
+
+      <block wx:else>
+        <button class="avatar-picker" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image wx:if="{{loginForm.avatarUrl}}" class="avatar-img" src="{{loginForm.avatarUrl}}" mode="aspectFill"></image>
+          <text wx:else>头像</text>
+        </button>
+        <input class="nick-input" type="nickname" placeholder="填写昵称" value="{{loginForm.nickName}}" bindinput="onNickInput" />
+        <button class="primary-btn login-primary" bindtap="completeLogin">完成注册</button>
+      </block>
+    </view>
+  </view>
 </view>

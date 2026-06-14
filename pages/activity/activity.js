@@ -1,10 +1,9 @@
-const api = require('../../utils/api.js')
-
 Page({
   data: {
     posters: [
-      `${api.ASSET_URL}/poster-home-3x4.png`,
-      `${api.ASSET_URL}/poster-service-500-3x4.png`
+      '/static/posters/poster-home.jpg',
+      '/static/posters/poster-service.jpg',
+      '/static/posters/poster-performance.jpg'
     ]
   },
   goService() {

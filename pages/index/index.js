@@ -1,14 +1,23 @@
-const api = require('../../utils/api.js')
-
 const POSTER_URLS = [
-  `${api.ASSET_URL}/poster-home-3x4.png`,
-  `${api.ASSET_URL}/poster-service-500-3x4.png`,
-  `${api.ASSET_URL}/poster-performance-3x4.jpg`
+  '/static/posters/poster-home.jpg',
+  '/static/posters/poster-service.jpg',
+  '/static/posters/poster-performance.jpg'
 ]
+
+const api = require('../../utils/api.js')
 
 Page({
   data: {
     heroReady: false,
+    firstPosterReady: false,
+    bootTimerReady: false,
+    loginPanelVisible: false,
+    loginStep: 'phone',
+    phoneCode: '',
+    loginForm: {
+      nickName: '',
+      avatarUrl: ''
+    },
     bootLogo: '/static/logo/swart-boot-logo.png',
     businessIcons: {
       clean: '/static/icons/service-fan.png',
@@ -26,56 +35,111 @@ Page({
     this.setData({
       posters: resolvePosterPaths(orderedPosters)
     })
-    this.cacheFirstPosterThenEnter(orderedPosters)
-    this.cacheRestPosters(orderedPosters)
+    this.startBootTimer()
+    this.prepareLoginPanel()
   },
-  onPosterLoad() {},
+  onPosterLoad(e) {
+    if (Number(e.currentTarget.dataset.index) === 0 && !this.data.firstPosterReady) {
+      this.setData({ firstPosterReady: true })
+      this.tryEnterHome()
+    }
+  },
   onPosterError() {
-    this.setData({ heroReady: true })
+    this.setData({
+      firstPosterReady: true
+    })
+    this.tryEnterHome()
     wx.showToast({
       title: '海报加载失败',
       icon: 'none'
     })
   },
-  cacheFirstPosterThenEnter(posters) {
-    const firstPoster = posters[0]
-    if (getCachedPoster(firstPoster)) {
-      this.setData({ heroReady: true })
+  startBootTimer() {
+    setTimeout(() => {
+      this.setData({ bootTimerReady: true })
+      this.tryEnterHome()
+    }, 720)
+  },
+  tryEnterHome() {
+    if (this.data.heroReady || !this.data.firstPosterReady || !this.data.bootTimerReady) {
       return
     }
-
-    cachePoster(firstPoster, localPath => {
-      this.applyCachedPoster(firstPoster, localPath)
-      if (!this.data.heroReady) {
-        this.setData({ heroReady: true })
-      }
-    }, () => {
-      if (!this.data.heroReady) {
-        this.setData({ heroReady: true })
-      }
-    })
+    this.setData({ heroReady: true })
   },
-  cacheRestPosters(posters) {
-    posters.forEach((url, index) => {
-      if (index === 0) {
-        return
-      }
-      if (getCachedPoster(url)) {
-        return
-      }
-      cachePoster(url, localPath => {
-        this.applyCachedPoster(url, localPath)
+  prepareLoginPanel() {
+    const userSession = wx.getStorageSync('userSession') || null
+    if (userSession && userSession.userId) {
+      return
+    }
+    this.setData({ loginPanelVisible: true })
+  },
+  onPhoneLogin(e) {
+    const detail = e.detail || {}
+    if (!detail.code) {
+      wx.showToast({
+        title: '需要授权手机号登录',
+        icon: 'none'
       })
-    })
-  },
-  applyCachedPoster(url, localPath) {
-    const index = this.posterUrls.indexOf(url)
-    if (index < 0 || this.data.posters[index] === localPath) {
       return
     }
-    const posters = this.data.posters.slice()
-    posters[index] = localPath
-    this.setData({ posters })
+    this.setData({
+      phoneCode: detail.code,
+      loginStep: 'profile'
+    })
+  },
+  onChooseAvatar(e) {
+    this.setData({
+      'loginForm.avatarUrl': e.detail.avatarUrl
+    })
+  },
+  onNickInput(e) {
+    this.setData({
+      'loginForm.nickName': e.detail.value
+    })
+  },
+  completeLogin() {
+    const nickName = (this.data.loginForm.nickName || '').trim() || '三物用户'
+    wx.login({
+      success: res => {
+        api.request('/api/users/login', {
+          method: 'POST',
+          data: {
+            loginCode: res.code,
+            phoneCode: this.data.phoneCode,
+            profile: {
+              nickName,
+              avatarUrl: this.data.loginForm.avatarUrl
+            }
+          }
+        }).then(result => {
+          const session = result.user || {
+            userId: `local_${Date.now()}`,
+            nickName,
+            avatarUrl: this.data.loginForm.avatarUrl,
+            phone: ''
+          }
+          wx.setStorageSync('userSession', session)
+          wx.setStorageSync('userInfo', {
+            nickName: session.nickName,
+            avatarUrl: session.avatarUrl
+          })
+          this.setData({ loginPanelVisible: false })
+        }).catch(() => {
+          const session = {
+            userId: `local_${Date.now()}`,
+            nickName,
+            avatarUrl: this.data.loginForm.avatarUrl,
+            phone: ''
+          }
+          wx.setStorageSync('userSession', session)
+          wx.setStorageSync('userInfo', {
+            nickName,
+            avatarUrl: session.avatarUrl
+          })
+          this.setData({ loginPanelVisible: false })
+        })
+      }
+    })
   },
   goService() {
     wx.navigateTo({
@@ -102,48 +166,5 @@ function shuffle(list) {
 }
 
 function resolvePosterPaths(urls) {
-  return urls.map(url => getCachedPoster(url) || url)
-}
-
-function getCachedPoster(url) {
-  const app = getApp()
-  const cachedPath = app.globalData.posterCache[url] || ''
-  if (!cachedPath) {
-    return ''
-  }
-  try {
-    wx.getFileSystemManager().accessSync(cachedPath)
-    return cachedPath
-  } catch (error) {
-    delete app.globalData.posterCache[url]
-    wx.setStorageSync('posterCache', app.globalData.posterCache)
-    return ''
-  }
-}
-
-function cachePoster(url, onSuccess, onFail) {
-  wx.downloadFile({
-    url,
-    success(downloadResult) {
-      if (downloadResult.statusCode !== 200) {
-        if (onFail) onFail()
-        return
-      }
-      wx.saveFile({
-        tempFilePath: downloadResult.tempFilePath,
-        success(saveResult) {
-          const app = getApp()
-          app.globalData.posterCache[url] = saveResult.savedFilePath
-          wx.setStorageSync('posterCache', app.globalData.posterCache)
-          if (onSuccess) onSuccess(saveResult.savedFilePath)
-        },
-        fail() {
-          if (onFail) onFail()
-        }
-      })
-    },
-    fail() {
-      if (onFail) onFail()
-    }
-  })
+  return urls
 }
