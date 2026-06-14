@@ -1,5 +1,5 @@
 .confirm-page {
-  padding-bottom: 170rpx;
+  padding-bottom: 48rpx;
 }
 
 .title-block {
@@ -93,12 +93,8 @@
 }
 
 .action-row {
-  position: fixed;
-  left: 28rpx;
-  right: 28rpx;
-  bottom: calc(28rpx + env(safe-area-inset-bottom));
-  z-index: 5;
   display: grid;
   grid-template-columns: 210rpx 1fr;
   gap: 16rpx;
+  margin-top: 28rpx;
 }

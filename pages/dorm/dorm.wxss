@@ -1,5 +1,5 @@
 .flow-page {
-  padding-bottom: 150rpx;
+  padding-bottom: 48rpx;
 }
 
 .step-line {
@@ -121,9 +121,7 @@
 }
 
 .bottom-action {
-  position: fixed;
-  left: 28rpx;
-  right: 28rpx;
-  bottom: calc(28rpx + env(safe-area-inset-bottom));
-  z-index: 5;
+  width: 100%;
+  margin-top: 28rpx;
+  box-sizing: border-box;
 }

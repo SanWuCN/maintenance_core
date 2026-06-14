@@ -3,7 +3,7 @@ page {
   min-height: 100vh;
   background: #f4f4f2;
   color: #111111;
-  font-family: "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "MiSans", "HarmonyOS Sans SC", "Alibaba PuHuiTi 3.0", "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 28rpx;
   line-height: 1.45;
   letter-spacing: 0;
@@ -20,13 +20,15 @@ button {
 }
 
 .section-title {
-  font-size: 32rpx;
-  font-weight: 700;
+  font-size: 34rpx;
+  font-weight: 900;
   letter-spacing: 0;
 }
 
 .muted {
   color: #777777;
+  font-size: 24rpx;
+  font-weight: 400;
 }
 
 .primary-btn {
@@ -35,7 +37,7 @@ button {
   background: #111111;
   color: #ffffff;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,6 +50,7 @@ button {
   background: #ffffff;
   color: #111111;
   border: 1rpx solid #e5e5e1;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;

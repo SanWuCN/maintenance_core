@@ -8,7 +8,7 @@
     <view class="summary-head">
       <view>
         <view class="summary-title">{{booking.service.name}}</view>
-        <view class="summary-sub">SW.ART CORE 校园清灰维护</view>
+        <view class="summary-sub">三物IT小屋 校园清灰维护</view>
       </view>
       <view class="summary-price">¥{{booking.service.price}}</view>
     </view>

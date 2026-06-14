@@ -153,7 +153,7 @@
 
 .business-item {
   position: relative;
-  height: 336rpx;
+  height: 272rpx;
   border-radius: 24rpx;
   border: 1rpx solid rgba(20, 20, 20, 0.06);
   background: #ffffff;
@@ -198,9 +198,9 @@
 .deco-right-lines {
   position: absolute;
   right: 0;
-  top: 62rpx;
-  width: 86rpx;
-  height: 208rpx;
+  top: 54rpx;
+  width: 74rpx;
+  height: 170rpx;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86 208'><path d='M76 0 V42 L48 72 V118 L2 180' stroke='%23c0c4c8' stroke-width='1.5' fill='none'/><path d='M84 44 V74 L58 104' stroke='%23e1e3e5' stroke-width='1.5' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -213,8 +213,8 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 128rpx;
-  height: 128rpx;
+  width: 108rpx;
+  height: 108rpx;
   background: linear-gradient(135deg, rgba(246, 247, 248, 0), rgba(238, 239, 241, 0.95));
   clip-path: polygon(100% 0, 100% 100%, 0 100%, 18% 84%, 36% 84%, 68% 52%, 68% 30%);
   z-index: 1;
@@ -223,12 +223,12 @@
 
 .dot-matrix {
   position: absolute;
-  right: 18rpx;
-  bottom: 18rpx;
-  width: 48rpx;
-  height: 42rpx;
-  background-image: radial-gradient(rgba(176, 180, 184, 0.95) 3rpx, transparent 3rpx);
-  background-size: 16rpx 16rpx;
+  right: 14rpx;
+  bottom: 14rpx;
+  width: 44rpx;
+  height: 36rpx;
+  background-image: radial-gradient(rgba(176, 180, 184, 0.95) 2.6rpx, transparent 2.6rpx);
+  background-size: 14rpx 14rpx;
 }
 
 .card-content {
@@ -236,7 +236,7 @@
   z-index: 3;
   width: 100%;
   height: 100%;
-  padding: 74rpx 18rpx 22rpx;
+  padding: 62rpx 18rpx 18rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -245,16 +245,16 @@
 
 .business-icon-wrap {
   position: relative;
-  width: 90rpx;
-  height: 90rpx;
+  width: 72rpx;
+  height: 72rpx;
 }
 
 .business-icon {
   position: absolute;
   left: 0;
   top: 0;
-  width: 90rpx;
-  height: 90rpx;
+  width: 72rpx;
+  height: 72rpx;
   transition: opacity 160ms ease;
 }
 
@@ -271,8 +271,8 @@
 }
 
 .business-title {
-  margin-top: 24rpx;
-  font-size: 32rpx;
+  margin-top: 18rpx;
+  font-size: 30rpx;
   line-height: 1.15;
   font-weight: 800;
   text-align: center;
@@ -283,19 +283,19 @@
   position: absolute;
   left: 16rpx;
   right: 16rpx;
-  bottom: 20rpx;
+  bottom: 16rpx;
   display: flex;
   align-items: center;
 }
 
 .icon-arrow {
-  width: 44rpx;
-  height: 44rpx;
+  width: 38rpx;
+  height: 38rpx;
   border: 2rpx solid rgba(120, 124, 128, 0.72);
   border-radius: 50%;
-  line-height: 39rpx;
+  line-height: 33rpx;
   text-align: center;
-  font-size: 34rpx;
+  font-size: 30rpx;
   font-weight: 300;
   box-sizing: border-box;
 }
