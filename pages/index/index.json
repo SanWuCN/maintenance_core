@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "三物IT小屋"
+  "navigationBarTitleText": "三物IT小屋",
+  "usingComponents": {
+    "auth-modal": "/components/auth-modal/auth-modal"
+  }
 }

@@ -18,6 +18,7 @@ Page({
     },
     showLevelProgress: true,
     progressStyle: 'width: 0%;',
+    loginPanelVisible: false,
 
     // 预约动态卡片数据 (为 null 时自动隐藏)
     activeAppointment: {
@@ -141,12 +142,22 @@ Page({
     }
   },
 
-  // 首次登录在主页完成：手机号授权 + 头像昵称注册。
   getProfile() {
-    wx.showToast({
-      title: '请回到主页完成登录',
-      icon: 'none'
-    })
+    this.setData({ loginPanelVisible: true })
+  },
+
+  closeLoginPanel() {
+    this.setData({ loginPanelVisible: false })
+  },
+
+  onLoginSuccess(e) {
+    const user = (e.detail || {}).user || wx.getStorageSync('userSession') || {}
+    this.setData({ loginPanelVisible: false })
+    if (user.userId) {
+      this.refreshUserAssets(user.userId)
+      return
+    }
+    this.onShow()
   },
 
   // ========== 页面路由跳转预留口 ==========

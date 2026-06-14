@@ -1,0 +1,318 @@
+.reg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.reg-modal {
+  position: relative;
+  width: 620rpx;
+  padding: 60rpx 40rpx;
+  border-radius: 40rpx;
+  background: #ffffff;
+  border: 1rpx solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 30rpx 80rpx rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.reg-modal::before,
+.reg-modal::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.reg-modal::before {
+  left: -18rpx;
+  top: 20rpx;
+  width: 190rpx;
+  height: 130rpx;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 190 130'><path d='M4 72 L52 72 L86 32 M16 116 L48 116 L66 92 L122 92' stroke='%23dddddd' stroke-width='2' fill='none'/><circle cx='52' cy='72' r='5' fill='%23d5d5d5'/><circle cx='122' cy='92' r='5' fill='%23222222'/></svg>");
+  background-size: 100% 100%;
+}
+
+.reg-modal::after {
+  right: -22rpx;
+  bottom: 58rpx;
+  width: 150rpx;
+  height: 220rpx;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 220'><path d='M130 0 V48 L98 80 V122 L62 158 V214' stroke='%23dddddd' stroke-width='2' fill='none'/><path d='M148 66 V132 L118 160' stroke='%23eeeeee' stroke-width='2' fill='none'/></svg>");
+  background-size: 100% 100%;
+}
+
+.close-icon {
+  position: absolute;
+  right: 40rpx;
+  top: 30rpx;
+  z-index: 3;
+  color: #999999;
+  font-size: 50rpx;
+  font-weight: 200;
+  line-height: 1;
+}
+
+.header-section {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 50rpx;
+  text-align: center;
+}
+
+.main-title {
+  color: #1a1a1a;
+  font-size: 44rpx;
+  font-weight: 900;
+  letter-spacing: 2rpx;
+}
+
+.highlight {
+  position: relative;
+  padding: 0 8rpx;
+  color: #333333;
+}
+
+.sub-title {
+  margin-top: 16rpx;
+  color: #888888;
+  font-size: 24rpx;
+  font-weight: 300;
+}
+
+.avatar-section,
+.phone-section {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.tech-frame {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  padding: 10rpx;
+  border: 1rpx dashed #dddddd;
+  border-radius: 40rpx;
+  box-sizing: border-box;
+}
+
+.phone-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f8f8;
+}
+
+.avatar-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: #f8f8f8;
+  border-radius: 30rpx;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-wrapper::after,
+.submit-btn::after {
+  border: 0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-mask {
+  position: absolute;
+  left: 10rpx;
+  right: 10rpx;
+  top: 10rpx;
+  bottom: 10rpx;
+  border-radius: 30rpx;
+  background: rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.avatar-wrapper:active .avatar-mask {
+  opacity: 1;
+}
+
+.upload-icon {
+  width: 42rpx;
+  height: 34rpx;
+  border-radius: 7rpx;
+  background: rgba(255, 255, 255, 0.86);
+  position: relative;
+}
+
+.upload-icon::before {
+  content: '';
+  position: absolute;
+  left: 13rpx;
+  top: 9rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border: 4rpx solid #888888;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.phone-mark {
+  position: relative;
+  width: 90rpx;
+  height: 128rpx;
+  border: 6rpx solid #1a1a1a;
+  border-radius: 26rpx;
+  box-sizing: border-box;
+}
+
+.phone-speaker {
+  position: absolute;
+  left: 28rpx;
+  top: 14rpx;
+  width: 24rpx;
+  height: 5rpx;
+  border-radius: 5rpx;
+  background: #1a1a1a;
+}
+
+.phone-dot {
+  position: absolute;
+  left: 34rpx;
+  bottom: 12rpx;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #1a1a1a;
+}
+
+.corner-tl,
+.corner-br {
+  position: absolute;
+  width: 30rpx;
+  height: 30rpx;
+  border-color: #1a1a1a;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.corner-tl {
+  top: -5rpx;
+  left: -5rpx;
+  border-width: 4rpx 0 0 4rpx;
+  border-radius: 10rpx 0 0 0;
+}
+
+.corner-br {
+  right: -5rpx;
+  bottom: -5rpx;
+  border-width: 0 4rpx 4rpx 0;
+  border-radius: 0 0 10rpx 0;
+}
+
+.upload-hint {
+  margin-top: 20rpx;
+  color: #999999;
+  font-size: 22rpx;
+  letter-spacing: 2rpx;
+}
+
+.input-section {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 60rpx;
+}
+
+.input-item {
+  height: 100rpx;
+  padding: 0 30rpx;
+  border-radius: 24rpx;
+  background: #f6f7f9;
+  border: 1rpx solid rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.icon-user {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 20rpx;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23999' stroke-width='2' viewBox='0 0 24 24'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>") center/contain no-repeat;
+}
+
+.nickname-input {
+  flex: 1;
+  color: #333333;
+  font-size: 30rpx;
+}
+
+.ph-style {
+  color: #cccccc;
+}
+
+.submit-btn {
+  position: relative;
+  z-index: 2;
+  width: 100% !important;
+  height: 110rpx;
+  margin: 0;
+  padding: 0;
+  border-radius: 55rpx;
+  background: #000000;
+  color: #ffffff;
+  font-size: 34rpx;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.2);
+}
+
+.btn-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.btn-deco {
+  position: absolute;
+  bottom: -15rpx;
+  left: 50%;
+  width: 60rpx;
+  height: 4rpx;
+  border-radius: 2rpx;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-50%);
+}
+
+.bottom-serial {
+  position: relative;
+  z-index: 2;
+  margin-top: 30rpx;
+  color: #d6d6d6;
+  font-family: monospace;
+  font-size: 18rpx;
+  letter-spacing: 4rpx;
+  text-align: center;
+}

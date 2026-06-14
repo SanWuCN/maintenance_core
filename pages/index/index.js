@@ -4,18 +4,10 @@ const POSTER_URLS = [
   '/static/posters/poster-performance.jpg'
 ]
 
-const api = require('../../utils/api.js')
-
 Page({
   data: {
     heroReady: true,
     loginPanelVisible: false,
-    loginStep: 'phone',
-    phoneCode: '',
-    loginForm: {
-      nickName: '',
-      avatarUrl: ''
-    },
     businessIcons: {
       clean: '/static/icons/service-fan.png',
       upgrade: '/static/icons/service-chip.png',
@@ -41,77 +33,10 @@ Page({
     }
     this.setData({ loginPanelVisible: true })
   },
-  onPhoneLogin(e) {
-    const detail = e.detail || {}
-    if (!detail.code) {
-      wx.showToast({
-        title: '需要授权手机号登录',
-        icon: 'none'
-      })
-      return
-    }
-    this.setData({
-      phoneCode: detail.code,
-      loginStep: 'profile'
-    })
-  },
-  onChooseAvatar(e) {
-    this.setData({
-      'loginForm.avatarUrl': e.detail.avatarUrl
-    })
-  },
-  onNickInput(e) {
-    this.setData({
-      'loginForm.nickName': e.detail.value
-    })
-  },
-  completeLogin() {
-    const nickName = (this.data.loginForm.nickName || '').trim() || '三物用户'
-    const clientUserId = getClientUserId()
-    wx.login({
-      success: res => {
-        api.request('/api/users/login', {
-          method: 'POST',
-          data: {
-            clientUserId,
-            loginCode: res.code,
-            phoneCode: this.data.phoneCode,
-            profile: {
-              nickName,
-              avatarUrl: this.data.loginForm.avatarUrl
-            }
-          }
-        }).then(result => {
-          const session = result.user || {
-            userId: `local_${Date.now()}`,
-            nickName,
-            avatarUrl: this.data.loginForm.avatarUrl,
-            phone: ''
-          }
-          wx.setStorageSync('userSession', session)
-          wx.setStorageSync('userInfo', {
-            nickName: session.nickName,
-            avatarUrl: session.avatarUrl
-          })
-          this.setData({ loginPanelVisible: false })
-        }).catch(() => {
-          const session = {
-            userId: `local_${Date.now()}`,
-            nickName,
-            avatarUrl: this.data.loginForm.avatarUrl,
-            phone: ''
-          }
-          wx.setStorageSync('userSession', session)
-          wx.setStorageSync('userInfo', {
-            nickName,
-            avatarUrl: session.avatarUrl
-          })
-          this.setData({ loginPanelVisible: false })
-        })
-      }
-    })
-  },
   closeLoginPanel() {
+    this.setData({ loginPanelVisible: false })
+  },
+  onLoginSuccess() {
     this.setData({ loginPanelVisible: false })
   },
   goService() {
@@ -140,13 +65,4 @@ function shuffle(list) {
 
 function resolvePosterPaths(urls) {
   return urls
-}
-
-function getClientUserId() {
-  let clientUserId = wx.getStorageSync('clientUserId')
-  if (!clientUserId) {
-    clientUserId = `client_${Date.now()}_${Math.random().toString(16).slice(2, 10)}`
-    wx.setStorageSync('clientUserId', clientUserId)
-  }
-  return clientUserId
 }

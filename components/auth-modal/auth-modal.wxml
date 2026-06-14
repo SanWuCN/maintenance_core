@@ -1,0 +1,65 @@
+<view wx:if="{{visible}}" class="reg-overlay" catchtouchmove="noop">
+  <view class="reg-modal">
+    <view class="close-icon" bindtap="closeModal">×</view>
+
+    <view class="header-section">
+      <view class="main-title" wx:if="{{loginStep === 'phone'}}">登录三物 <text class="highlight">IT</text> 小屋</view>
+      <view class="main-title" wx:else>注册三物 <text class="highlight">IT</text> 小屋</view>
+      <view class="sub-title" wx:if="{{loginStep === 'phone'}}">授权手机号后，用于预约联系和订单查询</view>
+      <view class="sub-title" wx:else>完善头像和昵称后，即可自动创建账号</view>
+    </view>
+
+    <block wx:if="{{loginStep === 'phone'}}">
+      <view class="phone-section">
+        <view class="tech-frame phone-frame">
+          <view class="corner-tl"></view>
+          <view class="corner-br"></view>
+          <view class="phone-mark">
+            <view class="phone-speaker"></view>
+            <view class="phone-dot"></view>
+          </view>
+        </view>
+        <text class="upload-hint">绑定手机号</text>
+      </view>
+
+      <button class="submit-btn" open-type="getPhoneNumber" bindgetphonenumber="onPhoneLogin">
+        <view class="btn-inner">
+          <text>授权手机号</text>
+          <view class="btn-deco"></view>
+        </view>
+      </button>
+    </block>
+
+    <block wx:else>
+      <view class="avatar-section">
+        <view class="tech-frame">
+          <view class="corner-tl"></view>
+          <view class="corner-br"></view>
+          <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image class="avatar-img" src="{{avatarDisplayUrl}}" mode="aspectFill"></image>
+            <view class="avatar-mask">
+              <view class="upload-icon"></view>
+            </view>
+          </button>
+        </view>
+        <text class="upload-hint">上传头像</text>
+      </view>
+
+      <view class="input-section">
+        <view class="input-item">
+          <view class="icon-user"></view>
+          <input class="nickname-input" type="nickname" placeholder="填写昵称" placeholder-class="ph-style" value="{{loginForm.nickName}}" bindinput="onNickInput" bindblur="onNickInput" />
+        </view>
+      </view>
+
+      <button class="submit-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitRegister">
+        <view class="btn-inner">
+          <text>完成注册</text>
+          <view class="btn-deco"></view>
+        </view>
+      </button>
+    </block>
+
+    <view class="bottom-serial">{{randomSerial}}</view>
+  </view>
+</view>
