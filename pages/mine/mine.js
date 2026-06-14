@@ -29,16 +29,7 @@ Page({
   onShow() {
     const userSession = wx.getStorageSync('userSession') || {}
     const userInfo = wx.getStorageSync('userInfo') || userSession || {}
-    const savedContact = wx.getStorageSync('savedContact') || {}
     const orders = wx.getStorageSync('orders') || []
-    
-    // 模拟从接口获取用户的积分和卡券数量 (真实开发中请替换为真实接口)
-    const mockUserAssets = {
-      points: 1250, // 测试数据，你可以修改这个数值看进度条和等级变化
-      cardsCount: 2,
-      couponsCount: 1
-    };
-
     const nickName = userSession.nickName || userInfo.nickName || ''
     const avatarUrl = userSession.avatarUrl || userInfo.avatarUrl || ''
 
@@ -50,23 +41,49 @@ Page({
       },
       nickName,
       avatarText: nickName ? nickName.slice(0, 1).toUpperCase() : 'SW',
-      points: mockUserAssets.points,
-      cardsCount: mockUserAssets.cardsCount,
-      couponsCount: mockUserAssets.couponsCount,
-      levelInfo: this.calculateLevel(mockUserAssets.points),
+      points: userSession.points || 0,
+      cardsCount: userSession.cardsCount || 0,
+      couponsCount: userSession.couponsCount || 0,
+      levelInfo: userSession.levelInfo || this.calculateLevel(userSession.points || 0),
+      activeAppointment: this.getActiveAppointment(orders),
       orders
     })
 
-    if (savedContact.phone) {
-      // 实际接单数据请求
-      api.request(`/api/orders?phone=${encodeURIComponent(savedContact.phone)}`)
-        .then(res => {
-          if (res.ok && res.orders) {
-            this.setData({ orders: res.orders })
-          }
-        })
-        .catch(() => {})
+    if (userSession.userId) {
+      this.refreshUserAssets(userSession.userId)
     }
+  },
+
+  refreshUserAssets(userId) {
+    api.request(`/api/users/me?userId=${encodeURIComponent(userId)}`)
+      .then(res => {
+        if (!res.ok || !res.user) {
+          return
+        }
+        const user = res.user
+        const orders = res.orders || []
+        wx.setStorageSync('userSession', user)
+        wx.setStorageSync('userInfo', {
+          nickName: user.nickName,
+          avatarUrl: user.avatarUrl
+        })
+        wx.setStorageSync('orders', orders)
+        this.setData({
+          userInfo: {
+            nickName: user.nickName,
+            avatarUrl: user.avatarUrl
+          },
+          nickName: user.nickName || '',
+          avatarText: user.nickName ? user.nickName.slice(0, 1).toUpperCase() : 'SW',
+          points: user.points || 0,
+          cardsCount: user.cardsCount || 0,
+          couponsCount: user.couponsCount || 0,
+          levelInfo: user.levelInfo || this.calculateLevel(user.points || 0),
+          activeAppointment: this.getActiveAppointment(orders),
+          orders
+        })
+      })
+      .catch(() => {})
   },
 
   // 核心：处理会员等级和进度计算
@@ -92,6 +109,19 @@ Page({
         nextName: 'MAX',
         needPoints: 0
       }
+    }
+  },
+
+  getActiveAppointment(orders) {
+    const active = (orders || []).find(item => item.status !== '已完成' && item.status !== '已取消')
+    if (!active) {
+      return null
+    }
+    const schedule = active.schedule || {}
+    const service = active.service || {}
+    return {
+      serviceName: service.name || active.serviceName || '电脑清灰维护',
+      bookTime: `${schedule.dateText || schedule.dateValue || ''} ${schedule.slotTime || ''}`.trim()
     }
   },
 

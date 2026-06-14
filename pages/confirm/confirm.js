@@ -24,16 +24,34 @@ Page({
   },
   submit() {
     wx.showLoading({ title: '提交中' })
+    const userSession = wx.getStorageSync('userSession') || {}
+    const payload = {
+      ...this.data.booking,
+      userId: userSession.userId || '',
+      user: {
+        userId: userSession.userId || '',
+        nickName: userSession.nickName || '',
+        avatarUrl: userSession.avatarUrl || '',
+        phone: userSession.phone || ''
+      }
+    }
     api.request('/api/orders', {
       method: 'POST',
-      data: this.data.booking
+      data: payload
     })
       .then(res => {
         const order = {
-          ...(res.order || this.data.booking),
+          ...(res.order || payload),
           orderNo: res.orderNo,
           status: '待确认',
           createdAt: Date.now()
+        }
+        if (res.user) {
+          wx.setStorageSync('userSession', res.user)
+          wx.setStorageSync('userInfo', {
+            nickName: res.user.nickName,
+            avatarUrl: res.user.avatarUrl
+          })
         }
         this.saveLocalOrder(order)
         this.finishSubmit('预约已提交', `订单号：${res.orderNo}`)

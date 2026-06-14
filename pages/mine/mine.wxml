@@ -1,42 +1,116 @@
-<view class="page-shell mine-page">
-  <view class="profile tech-card">
-    <image class="profile-logo" src="{{logoUrl}}" mode="aspectFit"></image>
-    <view class="profile-info">
-      <view class="profile-name">{{nickName || '校园用户'}}</view>
-      <view class="profile-sub">{{savedDorm || '未保存宿舍楼'}}</view>
-    </view>
-    <button class="login-btn" bindtap="getProfile">登录</button>
-  </view>
-
-  <view class="reservation-card tech-card">
-    <view class="card-head">
-      <view class="section-title">我的预约</view>
-      <button class="small-btn" bindtap="goService">新预约</button>
-    </view>
-    <block wx:if="{{orders.length}}">
-      <view wx:for="{{orders}}" wx:key="createdAt" class="order-item">
-        <view>
-          <view class="order-title">{{item.service.name}} · {{item.status}}</view>
-          <view class="order-copy">{{item.schedule.dateText}} {{item.schedule.slotTime}}</view>
-          <view class="order-copy">{{item.device.brand}} / {{item.dorm.dorm}}</view>
+<view class="user-wrap">
+  <view class="vip-card-section">
+    <view class="vip-card">
+      <view class="deco-lines"></view>
+      <view class="card-header">
+        <view class="avatar-box" bindtap="getProfile">
+          <image wx:if="{{userInfo.avatarUrl}}" class="avatar-img" src="{{userInfo.avatarUrl}}"></image>
+          <view wx:else class="avatar-text">{{avatarText}}</view>
         </view>
-        <view class="order-price">¥{{item.service.price}}</view>
+        <view class="user-info">
+          <view class="nickname">{{nickName || '点击登录/授权'}}</view>
+          <view class="level-badge" bindtap="goLevelDesc">
+            <text class="level-icon">⚡</text>
+            <text>{{levelInfo.name}}</text>
+            <text class="level-arrow">></text>
+          </view>
+        </view>
       </view>
-    </block>
-    <view wx:else class="empty">
-      <view class="empty-title">暂无预约</view>
-      <button class="empty-btn" bindtap="goService">立即预约</button>
+
+      <view class="asset-row">
+        <view class="asset-item">
+          <view class="asset-val tech-font">{{points}}</view>
+          <view class="asset-label">硬核积分</view>
+        </view>
+        <view class="asset-divider"></view>
+        <view class="asset-item" bindtap="goCards">
+          <view class="asset-val tech-font">{{cardsCount}}</view>
+          <view class="asset-label">特权次卡</view>
+        </view>
+        <view class="asset-divider"></view>
+        <view class="asset-item" bindtap="goCoupons">
+          <view class="asset-val tech-font">{{couponsCount}}</view>
+          <view class="asset-label">优惠券</view>
+        </view>
+      </view>
+
+      <view class="level-progress-bar" wx:if="{{levelInfo.name !== 'IT Goal'}}">
+        <view class="progress-track">
+          <view class="progress-fill" style="width: {{levelInfo.percent}}%"></view>
+        </view>
+        <view class="progress-hint">距离 {{levelInfo.nextName}} 还需 {{levelInfo.needPoints}} 积分</view>
+      </view>
     </view>
   </view>
 
-  <view class="status-grid">
-    <view class="status-card tech-card">
-      <view class="status-value">取送</view>
-      <view class="status-label">楼下交接</view>
+  <view class="appointment-notice" wx:if="{{activeAppointment}}">
+    <view class="notice-header">
+      <view class="notice-dot"></view>
+      <text class="notice-title">进行中的预约</text>
+      <text class="notice-time">刚刚更新</text>
     </view>
-    <view class="status-card tech-card">
-      <view class="status-value">视频</view>
-      <view class="status-label">过程记录</view>
+    <view class="notice-body">
+      <view class="notice-service">{{activeAppointment.serviceName}}</view>
+      <view class="notice-detail">上门时间：{{activeAppointment.bookTime}}</view>
+    </view>
+    <view class="notice-arrow">→</view>
+  </view>
+
+  <view class="module-box orders-module">
+    <view class="module-header">
+      <text class="module-title">服务订单</text>
+      <view class="module-more">全部订单 ></view>
+    </view>
+    <view class="order-grid">
+      <view class="order-item" hover-class="item-pressed">
+        <view class="order-icon order-icon-pay"></view>
+        <text>待付款</text>
+      </view>
+      <view class="order-item" hover-class="item-pressed">
+        <view class="order-icon order-icon-service"></view>
+        <text>待服务</text>
+      </view>
+      <view class="order-item" hover-class="item-pressed">
+        <view class="order-icon order-icon-eval"></view>
+        <text>待评价</text>
+      </view>
+      <view class="order-item" hover-class="item-pressed">
+        <view class="order-icon order-icon-aftersale"></view>
+        <text>退款/售后</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="module-box list-module">
+    <view class="list-item" hover-class="item-pressed" bindtap="goTask">
+      <view class="list-icon icon-task"></view>
+      <text class="list-text">任务中心</text>
+      <view class="list-arrow"></view>
+    </view>
+    <view class="list-item" hover-class="item-pressed" bindtap="goProfile">
+      <view class="list-icon icon-profile"></view>
+      <text class="list-text">个人信息</text>
+      <view class="list-arrow"></view>
+    </view>
+    <view class="list-item" hover-class="item-pressed" bindtap="goAbout">
+      <view class="list-icon icon-about"></view>
+      <text class="list-text">关于我们</text>
+      <view class="list-arrow"></view>
+    </view>
+    <view class="list-item" hover-class="item-pressed" bindtap="goJoin">
+      <view class="list-icon icon-join"></view>
+      <text class="list-text">加入我们</text>
+      <view class="list-arrow"></view>
+    </view>
+    <view class="list-item" hover-class="item-pressed" bindtap="goFeedback">
+      <view class="list-icon icon-feedback"></view>
+      <text class="list-text">问题反馈</text>
+      <view class="list-arrow"></view>
+    </view>
+    <view class="list-item list-item-last" hover-class="item-pressed" bindtap="goSecurity">
+      <view class="list-icon icon-security"></view>
+      <text class="list-text">账号与安全</text>
+      <view class="list-arrow"></view>
     </view>
   </view>
 </view>

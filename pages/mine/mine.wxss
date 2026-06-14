@@ -1,121 +1,338 @@
-.mine-page {
-  padding: 24rpx;
+page {
+  background: #f4f4f2; /* 延续主页的底色 */
+  color: #111;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, sans-serif;
 }
 
-.profile,
-.reservation-card {
-  padding: 28rpx;
-  margin-bottom: 18rpx;
+.user-wrap {
+  padding-bottom: 60rpx;
 }
 
-.profile {
+/* ================== 会员黑卡区 ================== */
+.vip-card-section {
+  padding: 30rpx 24rpx;
+}
+
+.vip-card {
+  position: relative;
+  background: linear-gradient(135deg, #222429 0%, #0d0d0f 100%);
+  border-radius: 32rpx;
+  padding: 40rpx 30rpx 30rpx;
+  color: #fff;
+  box-shadow: 0 20rpx 40rpx rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* 黑卡上的科技感装饰纹理 */
+.deco-lines {
+  position: absolute;
+  right: -20rpx;
+  top: -20rpx;
+  width: 200rpx;
+  height: 200rpx;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 2px, transparent 2px);
+  background-size: 16rpx 16rpx;
+  transform: rotate(15deg);
+  pointer-events: none;
+}
+
+.card-header {
   display: flex;
   align-items: center;
-  gap: 18rpx;
+  margin-bottom: 40rpx;
+  position: relative;
+  z-index: 2;
 }
 
-.profile-logo {
-  width: 86rpx;
-  height: 86rpx;
-  border-radius: 20rpx;
-  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.08);
+.avatar-box {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 28rpx;
+  background: #333;
+  border: 2rpx solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.profile-info {
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-text {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2rpx;
+}
+
+.user-info {
+  margin-left: 24rpx;
   flex: 1;
-  min-width: 0;
 }
 
-.profile-name {
-  font-size: 30rpx;
+.nickname {
+  font-size: 36rpx;
   font-weight: 700;
-}
-
-.profile-sub {
-  margin-top: 6rpx;
-  color: #777777;
-  font-size: 22rpx;
-}
-
-.login-btn,
-.small-btn,
-.empty-btn {
-  height: 58rpx;
-  line-height: 58rpx;
-  border-radius: 999rpx;
-  background: #111111;
-  color: #ffffff;
-  font-size: 23rpx;
-  padding: 0 24rpx;
-}
-
-.card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18rpx;
   margin-bottom: 12rpx;
 }
 
-.order-item {
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.15);
+  padding: 4rpx 16rpx;
+  border-radius: 99rpx;
+  font-size: 22rpx;
+  backdrop-filter: blur(4px);
+}
+
+.level-icon { margin-right: 6rpx; font-size: 20rpx; color: #ffeb3b; }
+.level-arrow { margin-left: 8rpx; font-size: 20rpx; opacity: 0.6; }
+
+/* 资产区 */
+.asset-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.asset-item {
+  flex: 1;
+  text-align: center;
+}
+
+.tech-font {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 44rpx;
+  font-weight: 900;
+  margin-bottom: 8rpx;
+}
+
+.asset-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.asset-divider {
+  width: 2rpx;
+  height: 40rpx;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 进度条 */
+.level-progress-bar {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 16rpx 20rpx;
+  border-radius: 16rpx;
+}
+
+.progress-track {
+  height: 6rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6a82fb, #fc5c7d);
+  border-radius: 4rpx;
+}
+
+.progress-hint {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: right;
+}
+
+/* ================== iOS锁屏风格预约卡片 ================== */
+.appointment-notice {
+  margin: 0 24rpx 24rpx;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1rpx solid rgba(255, 255, 255, 0.8);
+  border-radius: 32rpx;
+  padding: 24rpx 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.04);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.notice-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.notice-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background: #34c759; /* 科技绿 */
+  border-radius: 50%;
+  margin-right: 12rpx;
+  box-shadow: 0 0 8rpx rgba(52, 199, 89, 0.6);
+}
+
+.notice-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.notice-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.notice-body {
+  padding-left: 24rpx;
+}
+
+.notice-service {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6rpx;
+}
+
+.notice-detail {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.notice-arrow {
+  position: absolute;
+  right: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* ================== 通用模块面板 ================== */
+.module-box {
+  margin: 0 24rpx 24rpx;
+  background: #fff;
+  border-radius: 28rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.02);
+}
+
+.module-header {
   display: flex;
   justify-content: space-between;
-  gap: 18rpx;
-  padding: 20rpx 0;
-  border-top: 1rpx solid #f0f0ed;
+  align-items: center;
+  padding: 30rpx 30rpx 10rpx;
 }
 
-.order-title {
-  font-size: 26rpx;
-  font-weight: 700;
-}
-
-.order-copy {
-  margin-top: 6rpx;
-  color: #777777;
-  font-size: 22rpx;
-}
-
-.order-price {
-  flex-shrink: 0;
-  font-size: 32rpx;
+.module-title {
+  font-size: 30rpx;
   font-weight: 800;
 }
 
-.empty {
-  padding: 36rpx 0 20rpx;
-  text-align: center;
-}
-
-.empty-title {
-  color: #777777;
+.module-more {
   font-size: 24rpx;
+  color: #888;
 }
 
-.empty-btn {
-  width: 180rpx;
-  margin: 20rpx auto 0;
-  padding: 0;
+/* ================== 订单图标区 ================== */
+.order-grid {
+  display: flex;
+  padding: 30rpx 10rpx;
 }
 
-.status-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14rpx;
+.order-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 24rpx;
+  color: #444;
+  transition: opacity 0.2s;
 }
 
-.status-card {
-  padding: 28rpx 18rpx;
-  text-align: center;
+.order-icon {
+  width: 56rpx;
+  height: 56rpx;
+  margin-bottom: 12rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.8;
+}
+/* 使用纯 CSS 绘制极客风简易图标 (或者你可以替换为你自己的图片路径) */
+.order-icon-pay { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><rect x='3' y='6' width='18' height='12' rx='2'/><path d='M3 10h18'/></svg>"); }
+.order-icon-service { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'/></svg>"); }
+.order-icon-eval { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'/></svg>"); }
+.order-icon-aftersale { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16'/></svg>"); }
+
+/* ================== 列表菜单 ================== */
+.list-module {
+  padding: 10rpx 0;
 }
 
-.status-value {
-  font-size: 32rpx;
-  font-weight: 800;
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  position: relative;
+  transition: background 0.2s;
 }
 
-.status-label {
-  margin-top: 6rpx;
-  color: #777777;
-  font-size: 22rpx;
+.list-item:not(.list-item-last)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 90rpx;
+  right: 30rpx;
+  height: 1rpx;
+  background: #f0f0f0;
+}
+
+.list-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+}
+
+/* 列表简易图标 */
+.icon-task { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/><polyline points='10 9 9 9 8 9'/></svg>"); }
+.icon-profile { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>"); }
+.icon-about { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><circle cx='12' cy='12' r='10'/><line x1='12' y1='16' x2='12' y2='12'/><line x1='12' y1='8' x2='12.01' y2='8'/></svg>"); }
+.icon-join { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/><circle cx='8.5' cy='7' r='4'/><line x1='20' y1='8' x2='20' y2='14'/><line x1='23' y1='11' x2='17' y2='11'/></svg>"); }
+.icon-feedback { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/></svg>"); }
+.icon-security { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>"); }
+
+.list-text {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #222;
+}
+
+.list-arrow {
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 3rpx solid #ccc;
+  border-right: 3rpx solid #ccc;
+  transform: rotate(45deg);
+}
+
+/* 交互反馈 */
+.item-pressed {
+  opacity: 0.5;
+  background: #f9f9f9;
 }

@@ -1,0 +1,7 @@
+<view class="boot-screen">
+  <view class="boot-stage">
+    <image class="boot-logo" src="{{bootLogo}}" mode="aspectFit"></image>
+    <view class="boot-shadow"></view>
+  </view>
+  <view class="boot-text">光速加载中</view>
+</view>

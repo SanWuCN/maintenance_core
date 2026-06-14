@@ -1,16 +1,9 @@
 <view class="home-wrap">
-  <view wx:if="{{!heroReady}}" class="boot-screen">
-    <view class="boot-stage">
-      <image class="boot-logo" src="{{bootLogo}}" mode="aspectFit"></image>
-      <view class="boot-shadow"></view>
-    </view>
-  </view>
-
-  <scroll-view class="home page-shell {{heroReady ? 'home-ready' : 'home-hidden'}}" scroll-y enhanced show-scrollbar="{{false}}">
+  <scroll-view class="home page-shell" scroll-y enhanced show-scrollbar="{{false}}">
     <swiper class="poster-swiper" circular indicator-dots autoplay interval="8000" duration="500">
       <swiper-item wx:for="{{posters}}" wx:key="*this">
         <view class="poster-card">
-          <image class="poster-image" src="{{item}}" mode="aspectFill" bindload="onPosterLoad"></image>
+          <image class="poster-image" src="{{item}}" mode="aspectFill"></image>
         </view>
       </swiper-item>
     </swiper>
@@ -87,7 +80,7 @@
     </view>
   </scroll-view>
 
-  <view wx:if="{{heroReady && loginPanelVisible}}" class="login-mask">
+  <view wx:if="{{loginPanelVisible}}" class="login-mask">
     <view class="login-card">
       <view class="login-title">登录三物IT小屋</view>
       <view class="login-copy" wx:if="{{loginStep === 'phone'}}">首次使用需要授权微信绑定手机号，用于预约联系和订单查询。</view>

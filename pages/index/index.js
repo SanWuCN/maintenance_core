@@ -8,9 +8,7 @@ const api = require('../../utils/api.js')
 
 Page({
   data: {
-    heroReady: false,
-    firstPosterReady: false,
-    bootTimerReady: false,
+    heroReady: true,
     loginPanelVisible: false,
     loginStep: 'phone',
     phoneCode: '',
@@ -18,7 +16,6 @@ Page({
       nickName: '',
       avatarUrl: ''
     },
-    bootLogo: '/static/logo/swart-boot-logo.png',
     businessIcons: {
       clean: '/static/icons/service-fan.png',
       upgrade: '/static/icons/service-chip.png',
@@ -35,36 +32,7 @@ Page({
     this.setData({
       posters: resolvePosterPaths(orderedPosters)
     })
-    this.startBootTimer()
     this.prepareLoginPanel()
-  },
-  onPosterLoad(e) {
-    if (Number(e.currentTarget.dataset.index) === 0 && !this.data.firstPosterReady) {
-      this.setData({ firstPosterReady: true })
-      this.tryEnterHome()
-    }
-  },
-  onPosterError() {
-    this.setData({
-      firstPosterReady: true
-    })
-    this.tryEnterHome()
-    wx.showToast({
-      title: '海报加载失败',
-      icon: 'none'
-    })
-  },
-  startBootTimer() {
-    setTimeout(() => {
-      this.setData({ bootTimerReady: true })
-      this.tryEnterHome()
-    }, 720)
-  },
-  tryEnterHome() {
-    if (this.data.heroReady || !this.data.firstPosterReady || !this.data.bootTimerReady) {
-      return
-    }
-    this.setData({ heroReady: true })
   },
   prepareLoginPanel() {
     const userSession = wx.getStorageSync('userSession') || null
@@ -99,11 +67,13 @@ Page({
   },
   completeLogin() {
     const nickName = (this.data.loginForm.nickName || '').trim() || '三物用户'
+    const clientUserId = getClientUserId()
     wx.login({
       success: res => {
         api.request('/api/users/login', {
           method: 'POST',
           data: {
+            clientUserId,
             loginCode: res.code,
             phoneCode: this.data.phoneCode,
             profile: {
@@ -167,4 +137,13 @@ function shuffle(list) {
 
 function resolvePosterPaths(urls) {
   return urls
+}
+
+function getClientUserId() {
+  let clientUserId = wx.getStorageSync('clientUserId')
+  if (!clientUserId) {
+    clientUserId = `client_${Date.now()}_${Math.random().toString(16).slice(2, 10)}`
+    wx.setStorageSync('clientUserId', clientUserId)
+  }
+  return clientUserId
 }

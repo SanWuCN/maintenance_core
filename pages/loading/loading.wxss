@@ -1,0 +1,106 @@
+page {
+  background: #f4f4f2;
+}
+
+.boot-screen {
+  min-height: 100vh;
+  background: #f4f4f2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.boot-stage {
+  position: relative;
+  width: 180rpx;
+  height: 240rpx;
+}
+
+.boot-logo {
+  position: absolute;
+  left: 24rpx;
+  top: 10rpx;
+  width: 132rpx;
+  height: 132rpx;
+  transform-origin: 50% 50%;
+  animation: logo-jump-physics 1400ms infinite linear;
+}
+
+.boot-shadow {
+  position: absolute;
+  left: 46rpx;
+  bottom: 40rpx;
+  width: 88rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.15);
+  filter: blur(2rpx);
+  animation: shadow-jump-physics 1400ms infinite linear;
+}
+
+.boot-text {
+  margin-top: 40rpx;
+  color: #252525;
+  font-size: 28rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  animation: text-blink 1500ms ease-in-out infinite;
+}
+
+@keyframes logo-jump-physics {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1, 1);
+    animation-timing-function: ease-out;
+  }
+  10% {
+    transform: translateY(0) rotate(0deg) scale(1.12, 0.88);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  45% {
+    transform: translateY(-160rpx) rotate(180deg) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.6, 0.05, 0.8, 0.4);
+  }
+  80% {
+    transform: translateY(0) rotate(360deg) scale(1, 1);
+    animation-timing-function: ease-out;
+  }
+  90% {
+    transform: translateY(0) rotate(360deg) scale(1.1, 0.9);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg) scale(1, 1);
+  }
+}
+
+@keyframes shadow-jump-physics {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  10% {
+    opacity: 0.5;
+    transform: scale(1.15);
+  }
+  45% {
+    opacity: 0.05;
+    transform: scale(0.4);
+  }
+  80% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes text-blink {
+  0%, 100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 1;
+  }
+}

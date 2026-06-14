@@ -95,8 +95,10 @@ def init_db():
             )
             """
         )
+        ensure_column(conn, "orders", "user_id", "TEXT")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_slot ON orders(appointment_date, slot_id, status)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_phone ON orders(contact_phone, created_at)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_orders_user ON orders(user_id, created_at)")
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS users (
@@ -112,7 +114,18 @@ def init_db():
             )
             """
         )
+        ensure_column(conn, "users", "points", "INTEGER NOT NULL DEFAULT 0")
+        ensure_column(conn, "users", "member_level", "TEXT NOT NULL DEFAULT 'IT小白'")
+        ensure_column(conn, "users", "cards_count", "INTEGER NOT NULL DEFAULT 0")
+        ensure_column(conn, "users", "coupons_count", "INTEGER NOT NULL DEFAULT 0")
+        ensure_column(conn, "users", "total_spent", "INTEGER NOT NULL DEFAULT 0")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone)")
+
+
+def ensure_column(conn, table, column, ddl):
+    existing = {row["name"] for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+    if column not in existing:
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {ddl}")
 
 
 def json_response(handler, status, payload):
@@ -192,6 +205,119 @@ def wechat_phone(phone_code):
     return phone_info.get("purePhoneNumber") or phone_info.get("phoneNumber") or ""
 
 
+def calculate_member_level(points):
+    points = int(points or 0)
+    if points < 1000:
+        return {
+            "name": "IT小白",
+            "percent": round(points / 1000 * 100, 2),
+            "nextName": "入门IT",
+            "needPoints": 1000 - points,
+        }
+    if points < 5000:
+        return {
+            "name": "入门IT",
+            "percent": round((points - 1000) / 4000 * 100, 2),
+            "nextName": "IT Goal",
+            "needPoints": 5000 - points,
+        }
+    return {
+        "name": "IT Goal",
+        "percent": 100,
+        "nextName": "MAX",
+        "needPoints": 0,
+    }
+
+
+def user_payload(row):
+    if not row:
+        return None
+    points = int(row["points"] or 0)
+    level_info = calculate_member_level(points)
+    return {
+        "userId": row["user_id"],
+        "openid": row["openid"] or "",
+        "phone": row["phone"] or "",
+        "nickName": row["nick_name"] or "三物用户",
+        "avatarUrl": row["avatar_url"] or "",
+        "points": points,
+        "memberLevel": row["member_level"] or level_info["name"],
+        "levelInfo": level_info,
+        "cardsCount": int(row["cards_count"] or 0),
+        "couponsCount": int(row["coupons_count"] or 0),
+        "totalSpent": int(row["total_spent"] or 0),
+        "registeredAt": int(row["created_at"] or 0),
+        "updatedAt": int(row["updated_at"] or 0),
+    }
+
+
+def fetch_user(user_id):
+    if not user_id:
+        return None
+    with connect_db() as conn:
+        row = conn.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    return user_payload(row)
+
+
+def fetch_user_orders(user_id, phone=""):
+    if not user_id and not phone:
+        return []
+    params = []
+    filters = []
+    if user_id:
+        filters.append("user_id = ?")
+        params.append(user_id)
+    if phone:
+        filters.append("contact_phone = ?")
+        params.append(phone)
+    with connect_db() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT payload, status, order_no, created_at
+            FROM orders
+            WHERE {' OR '.join(filters)}
+            ORDER BY created_at DESC
+            LIMIT 20
+            """,
+            tuple(params),
+        ).fetchall()
+    orders = []
+    for row in rows:
+        item = json.loads(row["payload"])
+        item["status"] = row["status"]
+        item["orderNo"] = row["order_no"]
+        item["createdAt"] = row["created_at"]
+        orders.append(item)
+    return orders
+
+
+def award_points(conn, user_id, amount):
+    if not user_id:
+        return None
+    row = conn.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    if not row:
+        return None
+    earned = int(amount or 0) * 10
+    points = int(row["points"] or 0) + earned
+    total_spent = int(row["total_spent"] or 0) + int(amount or 0)
+    level = calculate_member_level(points)["name"]
+    now = int(time.time())
+    conn.execute(
+        """
+        UPDATE users
+        SET points = ?, member_level = ?, total_spent = ?, updated_at = ?
+        WHERE user_id = ?
+        """,
+        (points, level, total_spent, now, user_id),
+    )
+    updated = dict(row)
+    updated["points"] = points
+    updated["member_level"] = level
+    updated["total_spent"] = total_spent
+    updated["updated_at"] = now
+    return user_payload(updated)
+
+
 def service_by_id(service_id):
     return next((item for item in SERVICES if item["id"] == service_id), None)
 
@@ -232,6 +358,8 @@ def create_order(payload):
     schedule = payload.get("schedule") or {}
     device = payload.get("device") or {}
     dorm = payload.get("dorm") or {}
+    user = payload.get("user") or {}
+    user_id = payload.get("userId") or user.get("userId") or ""
 
     service_data = service_by_id(service.get("id") or service.get("service_id"))
     slot_data = slot_by_id(schedule.get("slotId") or schedule.get("slot_id"))
@@ -267,21 +395,25 @@ def create_order(payload):
         },
         "device": device,
         "dorm": dorm,
+        "user": {"userId": user_id},
     }
 
+    updated_user = None
     with connect_db() as conn:
         conn.execute(
             """
             INSERT INTO orders (
+                user_id,
                 order_no, status, service_id, service_name, service_price,
                 appointment_date, slot_id, slot_time,
                 device_brand, device_model, device_note,
                 dorm, contact_name, contact_phone, address_note,
                 payload, created_at
             )
-            VALUES (?, '待确认', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, '待确认', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
+                user_id or None,
                 order_no,
                 service_data["id"],
                 service_data["name"],
@@ -300,12 +432,20 @@ def create_order(payload):
                 now,
             ),
         )
-    return 201, {"ok": True, "orderNo": order_no, "order": {**normalized, "status": "待确认", "createdAt": now}}
+        updated_user = award_points(conn, user_id, service_data["price"])
+    return 201, {
+        "ok": True,
+        "orderNo": order_no,
+        "order": {**normalized, "status": "待确认", "createdAt": now},
+        "awardedPoints": service_data["price"] * 10 if updated_user else 0,
+        "user": updated_user,
+    }
 
 
 def login_user(payload):
     login_code = payload.get("loginCode") or ""
     phone_code = payload.get("phoneCode") or ""
+    client_user_id = (payload.get("clientUserId") or "").strip()
     profile = payload.get("profile") or {}
     nick_name = (profile.get("nickName") or "三物用户").strip() or "三物用户"
     avatar_url = profile.get("avatarUrl") or ""
@@ -320,41 +460,79 @@ def login_user(payload):
     except Exception as exc:
         print(f"wechat login fallback: {exc}", flush=True)
 
-    user_id = openid or f"dev_{uuid.uuid4().hex[:16]}"
-    normalized = {
-        "userId": user_id,
-        "openid": openid,
-        "phone": phone,
-        "nickName": nick_name,
-        "avatarUrl": avatar_url,
-        "registeredAt": now,
-    }
+    user_id = openid or client_user_id or f"dev_{uuid.uuid4().hex[:16]}"
 
     with connect_db() as conn:
         existed = None
         if openid:
-            existed = conn.execute("SELECT user_id, created_at FROM users WHERE openid = ?", (openid,)).fetchone()
+            existed = conn.execute("SELECT * FROM users WHERE openid = ?", (openid,)).fetchone()
+        if not existed and client_user_id:
+            existed = conn.execute("SELECT * FROM users WHERE user_id = ?", (client_user_id,)).fetchone()
+        if not existed and phone:
+            existed = conn.execute("SELECT * FROM users WHERE phone = ?", (phone,)).fetchone()
         if existed:
             user_id = existed["user_id"]
-            normalized["userId"] = user_id
-            normalized["registeredAt"] = existed["created_at"]
             conn.execute(
                 """
                 UPDATE users
-                SET phone = ?, nick_name = ?, avatar_url = ?, payload = ?, updated_at = ?
+                SET openid = COALESCE(?, openid),
+                    phone = COALESCE(NULLIF(?, ''), phone),
+                    nick_name = ?,
+                    avatar_url = ?,
+                    payload = ?,
+                    updated_at = ?
                 WHERE user_id = ?
                 """,
-                (phone, nick_name, avatar_url, json.dumps(normalized, ensure_ascii=False), now, user_id),
+                (
+                    openid or None,
+                    phone,
+                    nick_name,
+                    avatar_url,
+                    json.dumps(payload, ensure_ascii=False),
+                    now,
+                    user_id,
+                ),
             )
         else:
             conn.execute(
                 """
-                INSERT INTO users (user_id, openid, phone, nick_name, avatar_url, payload, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO users (
+                    user_id, openid, phone, nick_name, avatar_url, payload,
+                    points, member_level, cards_count, coupons_count, total_spent,
+                    created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, 0, 'IT小白', 0, 0, 0, ?, ?)
                 """,
-                (user_id, openid or None, phone, nick_name, avatar_url, json.dumps(normalized, ensure_ascii=False), now, now),
+                (
+                    user_id,
+                    openid or None,
+                    phone,
+                    nick_name,
+                    avatar_url,
+                    json.dumps(payload, ensure_ascii=False),
+                    now,
+                    now,
+                ),
             )
-    return 200, {"ok": True, "user": normalized}
+        row = conn.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    return 200, {"ok": True, "user": user_payload(row)}
+
+
+def get_user_center(query):
+    user_id = (query.get("userId") or [""])[0]
+    phone = (query.get("phone") or [""])[0]
+    if not user_id and not phone:
+        return 400, {"ok": False, "message": "userId 参数不能为空"}
+    with connect_db() as conn:
+        row = None
+        if user_id:
+            row = conn.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+        if not row and phone:
+            row = conn.execute("SELECT * FROM users WHERE phone = ?", (phone,)).fetchone()
+    if not row:
+        return 404, {"ok": False, "message": "用户不存在"}
+    user = user_payload(row)
+    return 200, {"ok": True, "user": user, "orders": fetch_user_orders(user["userId"], user["phone"])}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -387,6 +565,10 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/slots":
             appointment_date = (query.get("date") or [date.today().isoformat()])[0]
             json_response(self, 200, {"ok": True, "date": appointment_date, "slots": make_slots(appointment_date)})
+            return
+        if path == "/api/users/me":
+            status, response = get_user_center(query)
+            json_response(self, status, response)
             return
         if path == "/api/orders":
             phone = (query.get("phone") or [""])[0]
