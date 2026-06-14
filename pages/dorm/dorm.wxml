@@ -10,28 +10,26 @@
   </view>
 
   <view class="title-block">
-    <view class="section-title">填写地址</view>
-    <view class="muted">目前覆盖 21 栋宿舍楼，交接精确到楼下。</view>
+    <view class="section-title">选择地址</view>
+    <view class="muted">选择宿舍楼，交接精确到楼下。</view>
   </view>
 
-  <view class="tech-card profile-card">
-    <view>
-      <view class="profile-title">常用地址</view>
-      <view class="profile-copy">{{savedDorm ? savedDorm + ' 已保存，可直接使用' : '首次预约会保存你的常用地址'}}</view>
+  <view class="tech-card map-card">
+    <view class="map-head">
+      <view class="block-title">生活园区</view>
+      <view class="map-current">{{selectedDorm}}</view>
     </view>
-    <button class="use-btn" wx:if="{{savedDorm}}" bindtap="useSavedDorm">使用</button>
-  </view>
-
-  <view class="tech-card dorm-card">
-    <view class="block-title">楼栋</view>
-    <view class="dorm-grid">
+    <view class="dorm-map">
       <view
         wx:for="{{dorms}}"
-        wx:key="*this"
-        class="dorm-chip {{selectedDorm === item ? 'selected' : ''}}"
-        data-dorm="{{item}}"
+        wx:key="label"
+        class="dorm-building {{item.className}} {{selectedDorm === item.label ? 'selected' : ''}} {{item.disabled ? 'disabled' : ''}}"
+        data-dorm="{{item.label}}"
         bindtap="selectDorm"
-      >{{item}}</view>
+      >
+        <view class="building-body"></view>
+        <view class="building-label">{{item.label}}</view>
+      </view>
     </view>
   </view>
 

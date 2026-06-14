@@ -217,9 +217,9 @@ function makeLocalSession(nickName, avatarUrl) {
     nickName,
     avatarUrl,
     phone: '',
-    points: 0,
+    points: 100,
     cardsCount: 0,
-    couponsCount: 0,
+    couponsCount: 1,
     levelInfo: {
       name: 'IT小白',
       percent: 0,

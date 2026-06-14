@@ -1,0 +1,34 @@
+.plain-page {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 160rpx;
+}
+
+.empty-card {
+  text-align: center;
+}
+
+.empty-illus {
+  width: 150rpx;
+  height: 128rpx;
+  margin: 0 auto;
+  border-radius: 24rpx;
+  border: 10rpx solid #f1f1f1;
+  opacity: 0.9;
+}
+
+.empty-title {
+  margin-top: 48rpx;
+  color: #999999;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.empty-copy {
+  margin-top: 18rpx;
+  color: #aaaaaa;
+  font-size: 26rpx;
+}

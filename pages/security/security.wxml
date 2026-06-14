@@ -1,0 +1,50 @@
+<view class="security-page">
+  <view class="group">
+    <view class="sec-row">
+      <text>更换手机号</text>
+      <view class="row-right"><text>{{maskedPhone}}</text><view class="arrow"></view></view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="sec-row">
+      <text>登录密码</text>
+      <view class="row-right"><text>未设置</text><view class="arrow"></view></view>
+    </view>
+    <view class="sec-row last">
+      <text>登录设备管理</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="sec-row last">
+      <text>安全中心</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="sec-row">
+      <text>授权管理</text>
+      <view class="arrow"></view>
+    </view>
+    <view class="sec-row last">
+      <text>协议与规则</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="sec-row">
+      <text>个人信息收集清单</text>
+      <view class="arrow"></view>
+    </view>
+    <view class="sec-row last">
+      <text>第三方信息数据共享清单</text>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <button class="logout-btn" bindtap="logout">退出当前账号</button>
+</view>

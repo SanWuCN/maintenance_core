@@ -299,7 +299,7 @@ def award_points(conn, user_id, amount):
     row = conn.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
     if not row:
         return None
-    earned = int(amount or 0) * 10
+    earned = int(round(float(amount or 0) * 10))
     points = int(row["points"] or 0) + earned
     total_spent = int(row["total_spent"] or 0) + int(amount or 0)
     level = calculate_member_level(points)["name"]
@@ -513,7 +513,7 @@ def login_user(payload):
                     points, member_level, cards_count, coupons_count, total_spent,
                     created_at, updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, 0, 'IT小白', 0, 0, 0, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, 100, 'IT小白', 0, 1, 0, ?, ?)
                 """,
                 (
                     user_id,

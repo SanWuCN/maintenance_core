@@ -1,15 +1,15 @@
 <view class="user-wrap">
   <view class="vip-card-section">
-    <view class="vip-card">
+    <view class="vip-card" bindtap="goMember">
       <view class="deco-lines"></view>
       <view class="card-header">
-        <view class="avatar-box" bindtap="getProfile">
+        <view class="avatar-box" catchtap="getProfile">
           <image wx:if="{{userInfo.avatarUrl}}" class="avatar-img" src="{{userInfo.avatarUrl}}"></image>
           <view wx:else class="avatar-text">{{avatarText}}</view>
         </view>
-        <view class="user-info" bindtap="getProfile">
+        <view class="user-info" catchtap="getProfile">
           <view class="nickname">{{nickName || '点击登录/授权'}}</view>
-          <view class="level-badge" catchtap="goLevelDesc">
+      <view class="level-badge" catchtap="goMember">
             <text class="level-icon">⚡</text>
             <text>{{levelInfo.name}}</text>
             <text class="level-arrow">></text>
@@ -43,7 +43,8 @@
     </view>
   </view>
 
-  <view class="appointment-notice" wx:if="{{activeAppointment}}">
+  <view class="appointment-notice" wx:if="{{activeAppointment}}" bindtap="goActiveOrder">
+    <view class="notice-flow"></view>
     <view class="notice-header">
       <view class="notice-dot"></view>
       <text class="notice-title">进行中的预约</text>
@@ -59,22 +60,22 @@
   <view class="module-box orders-module">
     <view class="module-header">
       <text class="module-title">服务订单</text>
-      <view class="module-more">全部订单 ></view>
+      <view class="module-more" bindtap="goOrders" data-status="all">全部订单 ></view>
     </view>
     <view class="order-grid">
-      <view class="order-item" hover-class="item-pressed">
+      <view class="order-item" hover-class="item-pressed" bindtap="goOrders" data-status="unpaid">
         <view class="order-icon order-icon-pay"></view>
         <text>待付款</text>
       </view>
-      <view class="order-item" hover-class="item-pressed">
+      <view class="order-item" hover-class="item-pressed" bindtap="goOrders" data-status="service">
         <view class="order-icon order-icon-service"></view>
         <text>待服务</text>
       </view>
-      <view class="order-item" hover-class="item-pressed">
+      <view class="order-item" hover-class="item-pressed" bindtap="goReviews">
         <view class="order-icon order-icon-eval"></view>
         <text>待评价</text>
       </view>
-      <view class="order-item" hover-class="item-pressed">
+      <view class="order-item" hover-class="item-pressed" bindtap="goAfterSale">
         <view class="order-icon order-icon-aftersale"></view>
         <text>退款/售后</text>
       </view>

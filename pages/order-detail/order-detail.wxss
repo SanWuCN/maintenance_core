@@ -1,0 +1,161 @@
+.detail-page {
+  min-height: 100vh;
+  padding: 34rpx 28rpx 174rpx;
+  background: #f5f5f3;
+  box-sizing: border-box;
+}
+
+.title-block {
+  margin-bottom: 28rpx;
+}
+
+.order-card,
+.promise-card {
+  border-radius: 28rpx;
+  background: #ffffff;
+  border: 1rpx solid #e8e8e3;
+  box-shadow: 0 18rpx 42rpx rgba(20, 20, 20, 0.08);
+  overflow: hidden;
+}
+
+.order-hero {
+  display: flex;
+  justify-content: space-between;
+  min-height: 178rpx;
+  padding: 36rpx 42rpx;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 66% 46%, rgba(255, 255, 255, 0.18) 0 60rpx, transparent 62rpx),
+    linear-gradient(120deg, #111111, #050505);
+  box-sizing: border-box;
+}
+
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 950;
+}
+
+.hero-sub {
+  margin-top: 10rpx;
+  color: rgba(255,255,255,0.72);
+  font-size: 25rpx;
+}
+
+.hero-price {
+  text-align: right;
+}
+
+.hero-price view {
+  font-size: 58rpx;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.hero-price text {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 23rpx;
+  color: rgba(255,255,255,0.72);
+}
+
+.detail-list {
+  padding: 18rpx 38rpx 24rpx;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 44rpx 150rpx 1fr;
+  align-items: center;
+  gap: 18rpx;
+  min-height: 78rpx;
+  border-bottom: 1rpx solid #ecece8;
+}
+
+.detail-row:last-child {
+  border-bottom: 0;
+}
+
+.detail-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.detail-label {
+  color: #555555;
+  font-size: 27rpx;
+  font-weight: 800;
+}
+
+.detail-value {
+  color: #111111;
+  font-size: 28rpx;
+  font-weight: 900;
+  text-align: right;
+  word-break: break-all;
+}
+
+.promise-card {
+  margin-top: 24rpx;
+  padding: 32rpx;
+}
+
+.promise-title {
+  font-size: 32rpx;
+  font-weight: 950;
+  margin-bottom: 20rpx;
+}
+
+.promise-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10rpx;
+  color: #555555;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.bottom-bar {
+  position: fixed;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: calc(18rpx + env(safe-area-inset-bottom));
+  min-height: 118rpx;
+  padding: 18rpx 22rpx;
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  border-radius: 28rpx;
+  background: rgba(255,255,255,0.96);
+  border: 1rpx solid #e8e8e3;
+  box-shadow: 0 -10rpx 42rpx rgba(20,20,20,0.12);
+  box-sizing: border-box;
+}
+
+.bar-price {
+  flex: 1;
+}
+
+.bar-price text {
+  color: #777777;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.bar-price view {
+  margin-top: 4rpx;
+  color: #111111;
+  font-size: 34rpx;
+  font-weight: 950;
+}
+
+.cancel-btn {
+  width: 260rpx;
+  height: 82rpx;
+  line-height: 82rpx;
+  border-radius: 999rpx;
+  padding: 0;
+  background: #111111;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 950;
+}

@@ -1,0 +1,41 @@
+<view class="member-page">
+  <view class="page-title">会员中心</view>
+  <swiper class="level-swiper" indicator-dots circular current="{{currentLevelIndex}}" bindchange="onLevelChange">
+    <swiper-item wx:for="{{levels}}" wx:key="name">
+      <view class="member-card {{item.className}}">
+        <view class="current-tag" wx:if="{{item.current}}">当前等级</view>
+        <view class="card-name">{{item.name}}</view>
+        <view class="card-life">永久有效</view>
+        <view class="card-points">{{points}} <text>积分</text></view>
+        <view class="card-rule">{{item.rule}}</view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="benefit-grid">
+    <view wx:for="{{benefits}}" wx:key="title" class="benefit-item">
+      <view class="benefit-icon">{{item.icon}}</view>
+      <view class="benefit-title">{{item.title}}</view>
+      <view class="benefit-copy">{{item.copy}}</view>
+    </view>
+  </view>
+
+  <view class="module-card">
+    <view class="module-title">成长任务</view>
+    <view class="task-row">
+      <view class="task-mark">¥</view>
+      <view class="task-info">
+        <view>购买服务</view>
+        <text>每消费 1 元获得 10 积分，优惠部分不计积分</text>
+      </view>
+      <button bindtap="goHome">去预约</button>
+    </view>
+  </view>
+
+  <view class="module-card">
+    <view class="module-title">会员说明</view>
+    <view class="rule-row">IT小白：注册默认入会，赠送 100 积分与 1 张满 50 减 10.1 优惠券。</view>
+    <view class="rule-row">入门IT：满 1000 积分自动升级。</view>
+    <view class="rule-row">IT Goal：满 5000 积分自动升级。</view>
+  </view>
+</view>

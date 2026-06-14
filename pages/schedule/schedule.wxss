@@ -14,7 +14,7 @@
 
 .step-line {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10rpx;
   margin-bottom: 24rpx;
 }
@@ -53,11 +53,11 @@
 
 .schedule-head {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   align-items: start;
   row-gap: 18rpx;
   column-gap: 18rpx;
-  padding: 0 34rpx 30rpx;
+  padding: 0 34rpx 32rpx;
 }
 
 .schedule-copy {
@@ -72,17 +72,33 @@
 }
 
 .selected-date-trigger {
-  grid-column: 1 / -1;
+  position: relative;
   justify-self: center;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 220rpx;
-  padding-top: 4rpx;
+  margin-left: -12rpx;
+  padding: 4rpx 18rpx 8rpx 26rpx;
+  border-radius: 22rpx;
   color: #070707;
   font-size: 52rpx;
   font-weight: 900;
   line-height: 1;
+  text-shadow: 0 5rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.selected-date-trigger::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -18rpx;
+  width: 170rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.08) 42%, rgba(0, 0, 0, 0) 72%);
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .date-arrow {
@@ -92,15 +108,6 @@
   border-right: 5rpx solid #111111;
   border-bottom: 5rpx solid #111111;
   transform: rotate(45deg) translateY(-4rpx);
-}
-
-.calendar-link {
-  justify-self: end;
-  align-self: center;
-  color: #5e5e5e;
-  font-size: 24rpx;
-  font-weight: 800;
-  white-space: nowrap;
 }
 
 .date-strip {
@@ -169,6 +176,12 @@
   color: #ffffff;
 }
 
+.slot-card.selected .slot-time {
+  font-size: 45rpx;
+  font-weight: 950;
+  animation: slotTimePop 260ms cubic-bezier(0.22, 1.08, 0.28, 1);
+}
+
 .slot-card.disabled {
   opacity: 0.42;
 }
@@ -208,6 +221,9 @@
 .rule-card {
   margin-top: 22rpx;
   padding: 28rpx;
+  background: #ededeb;
+  border-color: #deded9;
+  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.82), 0 14rpx 32rpx rgba(20, 20, 20, 0.04);
 }
 
 .rule-title {
@@ -400,4 +416,16 @@
 
 .picker-confirm {
   height: 86rpx;
+}
+
+@keyframes slotTimePop {
+  0% {
+    transform: scale(1);
+  }
+  56% {
+    transform: scale(1.055);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

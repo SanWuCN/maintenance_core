@@ -1,0 +1,44 @@
+<view class="detail-page">
+  <view class="title-block">
+    <view class="section-title">预约详情</view>
+    <view class="muted">服务状态：{{statusText}}</view>
+  </view>
+
+  <view class="order-card">
+    <view class="order-hero">
+      <view>
+        <view class="hero-title">{{serviceName}}</view>
+        <view class="hero-sub">{{serviceDesc}}</view>
+      </view>
+      <view class="hero-price">
+        <view>¥{{totalPrice}}</view>
+        <text>{{payStatus}}</text>
+      </view>
+    </view>
+    <view class="detail-list">
+      <view wx:for="{{detailRows}}" wx:key="label" class="detail-row">
+        <image class="detail-icon" src="{{item.icon}}" mode="aspectFit" />
+        <text class="detail-label">{{item.label}}</text>
+        <text class="detail-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="promise-card">
+    <view class="promise-title">服务承诺</view>
+    <view class="promise-grid">
+      <view>专业工程师</view>
+      <view>标准流程</view>
+      <view>准时服务</view>
+      <view>隐私保护</view>
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="bar-price">
+      <text>上门支付</text>
+      <view>{{payStatus}}</view>
+    </view>
+    <button class="cancel-btn" bindtap="cancelOrder" disabled="{{cancelDisabled}}">{{cancelText}}</button>
+  </view>
+</view>

@@ -41,7 +41,7 @@
       <view class="addon-title">附加服务</view>
       <view class="addon-note">可自由勾选</view>
     </view>
-    <view wx:for="{{addons}}" wx:key="id" class="addon-row" data-id="{{item.id}}" bindtap="toggleAddon">
+    <view wx:for="{{addons}}" wx:key="id" class="addon-row {{item.selected ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="toggleAddon">
       <view class="addon-check {{item.selected ? 'checked' : ''}}"></view>
       <view class="addon-name">{{item.name}}</view>
       <view class="addon-price">

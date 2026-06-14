@@ -1,15 +1,22 @@
 const app = getApp()
 const api = require('../../utils/api.js')
-const bookingFlow = require('../../utils/bookingFlow.js')
 
 Page({
   data: {
     booking: {},
     actionReady: false,
     submitting: false,
-    flowSteps: [],
     totalPrice: 0,
-    hasAddons: false
+    hasAddons: false,
+    detailRows: [],
+    addonRows: [],
+    promiseItems: [
+      { icon: '/static/confirm/engineer.png', label: '专业工程师' },
+      { icon: '/static/confirm/process.png', label: '标准流程' },
+      { icon: '/static/confirm/clock.png', label: '准时服务' },
+      { icon: '/static/confirm/lock.png', label: '隐私保护' }
+    ],
+    flowMarks: ['服务', '时间', '设备', '地址', '确认']
   },
   onShow() {
     const booking = app.globalData.booking || {}
@@ -27,7 +34,8 @@ Page({
       booking,
       totalPrice: this.calculateTotal(booking),
       hasAddons: Boolean((booking.addons || []).length),
-      flowSteps: bookingFlow.buildFlowSteps('confirm', booking)
+      detailRows: this.buildDetailRows(booking),
+      addonRows: this.buildAddonRows(booking)
     })
   },
   onReady() {
@@ -42,8 +50,51 @@ Page({
     const greasePrice = booking.grease ? Number(booking.grease.price || 0) : 0
     return servicePrice + addonsPrice + greasePrice
   },
-  goFlowStep(e) {
-    bookingFlow.goFlowStep(e.currentTarget.dataset.key, 'confirm', app.globalData.booking)
+  buildDetailRows(booking) {
+    const rows = [
+      {
+        icon: '/static/confirm/service.png',
+        label: '主项目',
+        value: `${booking.service.name} · ¥${booking.service.price}`
+      }
+    ]
+    if (booking.grease) {
+      rows.push({
+        icon: '/static/confirm/grease.png',
+        label: '硅脂',
+        value: `${booking.grease.finalName} · +${booking.grease.price} RMB`
+      })
+    }
+    rows.push(
+      {
+        icon: '/static/confirm/time.png',
+        label: '预约时间',
+        value: `${booking.schedule.dateText} ${booking.schedule.slotTime}`
+      },
+      {
+        icon: '/static/confirm/device.png',
+        label: '设备型号',
+        value: `${booking.device.brand} · ${booking.device.finalModel}`
+      },
+      {
+        icon: '/static/confirm/address.png',
+        label: '地址',
+        value: booking.dorm.dorm
+      },
+      {
+        icon: '/static/confirm/phone.png',
+        label: '联系方式',
+        value: `${booking.dorm.contactName || ''} ${booking.dorm.contactPhone}`.trim()
+      }
+    )
+    return rows
+  },
+  buildAddonRows(booking) {
+    return (booking.addons || []).map(item => ({
+      ...item,
+      priceText: item.free ? '0 RMB' : `+${item.price} RMB`,
+      oldPriceText: item.free ? `+${item.oldPrice} RMB` : ''
+    }))
   },
   backEdit() {
     wx.redirectTo({ url: '/pages/dorm/dorm' })
@@ -72,7 +123,8 @@ Page({
         const order = {
           ...(res.order || payload),
           orderNo: res.orderNo,
-          status: '待确认',
+          status: '待服务',
+          payStatus: '已支付',
           createdAt: Date.now()
         }
         if (res.user) {
@@ -88,7 +140,8 @@ Page({
       .catch(err => {
         const order = {
           ...this.data.booking,
-          status: '待确认',
+          status: '待服务',
+          payStatus: '已支付',
           createdAt: Date.now()
         }
         this.saveLocalOrder(order)

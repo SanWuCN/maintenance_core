@@ -2,8 +2,7 @@ const FLOW_STEPS = [
   { key: 'service', label: '服务', url: '/pages/service/service' },
   { key: 'schedule', label: '时间', url: '/pages/schedule/schedule' },
   { key: 'device', label: '设备', url: '/pages/device/device' },
-  { key: 'dorm', label: '地址', url: '/pages/dorm/dorm' },
-  { key: 'confirm', label: '确认', url: '/pages/confirm/confirm' }
+  { key: 'dorm', label: '地址', url: '/pages/dorm/dorm' }
 ]
 
 function canVisitStep(key, booking = {}) {
@@ -11,7 +10,6 @@ function canVisitStep(key, booking = {}) {
   if (key === 'schedule') return Boolean(booking.service)
   if (key === 'device') return Boolean(booking.service && booking.schedule)
   if (key === 'dorm') return Boolean(booking.service && booking.schedule && booking.device)
-  if (key === 'confirm') return Boolean(booking.service && booking.schedule && booking.device && booking.dorm)
   return false
 }
 

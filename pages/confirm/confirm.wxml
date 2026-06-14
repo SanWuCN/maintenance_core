@@ -1,85 +1,85 @@
 <view class="page-shell confirm-page">
-  <view class="step-line">
-    <view
-      wx:for="{{flowSteps}}"
-      wx:key="key"
-      class="step {{item.state}} {{item.lockClass}}"
-      data-key="{{item.key}}"
-      bindtap="goFlowStep"
-    >{{item.label}}</view>
+  <view class="title-panel">
+    <view>
+      <view class="section-title">确认订单</view>
+      <view class="muted">核对无误后再付款预定</view>
+    </view>
   </view>
 
-  <view class="title-block">
-    <view class="section-title">确认订单</view>
-    <view class="muted">核对无误后再付款预定。</view>
-  </view>
-
-  <view class="summary-card tech-card">
-    <view class="summary-head">
+  <view class="order-card">
+    <view class="order-hero">
       <view>
-        <view class="summary-title">{{booking.service.name}}</view>
-        <view class="summary-sub">{{booking.service.desc}}</view>
+        <view class="hero-title">{{booking.service.name}}</view>
+        <view class="hero-sub">{{booking.service.desc}}</view>
       </view>
-      <view class="summary-price">¥{{totalPrice}}</view>
+      <view class="hero-price">
+        <view>¥{{totalPrice}}</view>
+        <text>总价</text>
+      </view>
     </view>
 
-    <view class="divider"></view>
-
-    <view class="summary-row">
-      <text class="label">主项目</text>
-      <text class="value">{{booking.service.name}} · ¥{{booking.service.price}}</text>
-    </view>
-    <view class="summary-row" wx:if="{{booking.grease}}">
-      <text class="label">硅脂</text>
-      <text class="value">{{booking.grease.finalName}} · +{{booking.grease.price}} RMB</text>
-    </view>
-    <view class="summary-row">
-      <text class="label">预约时间</text>
-      <text class="value">{{booking.schedule.dateText}} {{booking.schedule.slotTime}}</text>
-    </view>
-    <view class="summary-row">
-      <text class="label">设备型号</text>
-      <text class="value">{{booking.device.brand}} · {{booking.device.finalModel}}</text>
-    </view>
-    <view class="summary-row">
-      <text class="label">地址</text>
-      <text class="value">{{booking.dorm.dorm}}</text>
-    </view>
-    <view class="summary-row">
-      <text class="label">联系方式</text>
-      <text class="value">{{booking.dorm.contactName}} {{booking.dorm.contactPhone}}</text>
-    </view>
-    <view class="summary-row" wx:if="{{booking.device.note}}">
-      <text class="label">设备备注</text>
-      <text class="value">{{booking.device.note}}</text>
-    </view>
-    <view class="summary-row" wx:if="{{booking.dorm.addressNote}}">
-      <text class="label">交接备注</text>
-      <text class="value">{{booking.dorm.addressNote}}</text>
-    </view>
-  </view>
-
-  <view class="gift-card tech-card" wx:if="{{hasAddons}}">
-    <view class="gift-title">附加服务</view>
-    <view wx:for="{{booking.addons}}" wx:key="name" class="gift-row">
-      <text>{{item.name}}</text>
-      <view>
-        <text wx:if="{{item.free}}" class="old-price">+{{item.oldPrice}} RMB</text>
-        <text wx:if="{{item.free}}" class="free-price"> 0 RMB</text>
-        <text wx:else class="free-price">+{{item.price}} RMB</text>
+    <view class="detail-list">
+      <view wx:for="{{detailRows}}" wx:key="label" class="detail-row">
+        <image class="detail-icon" src="{{item.icon}}" mode="aspectFit" />
+        <text class="detail-label">{{item.label}}</text>
+        <text class="detail-value">{{item.value}}</text>
+      </view>
+      <view wx:if="{{booking.device.note}}" class="detail-row note-row">
+        <image class="detail-icon" src="/static/confirm/device.png" mode="aspectFit" />
+        <text class="detail-label">设备备注</text>
+        <text class="detail-value">{{booking.device.note}}</text>
+      </view>
+      <view wx:if="{{booking.dorm.addressNote}}" class="detail-row note-row">
+        <image class="detail-icon" src="/static/confirm/address.png" mode="aspectFit" />
+        <text class="detail-label">交接备注</text>
+        <text class="detail-value">{{booking.dorm.addressNote}}</text>
       </view>
     </view>
   </view>
 
-  <view class="promise-card tech-card">
-    <view class="promise-title">交付承诺</view>
-    <view class="promise-row">配送形式：楼下取机，楼下送回。</view>
-    <view class="promise-row">清灰维护全程视频记录。</view>
-    <view class="promise-row">如发现异常硬件问题，先沟通再处理。</view>
+  <view class="addon-card confirm-card" wx:if="{{hasAddons}}">
+    <view class="card-head">
+      <view class="hex-mark">
+        <image src="/static/confirm/grease-white.png" mode="aspectFit" />
+      </view>
+      <view class="card-title">附加服务</view>
+      <view class="card-badge">专业服务 · 安心保障</view>
+    </view>
+    <view wx:for="{{addonRows}}" wx:key="id" class="addon-row">
+      <text class="addon-name">{{item.name}}</text>
+      <view class="addon-dash"></view>
+      <text wx:if="{{item.oldPriceText}}" class="old-price">{{item.oldPriceText}}</text>
+      <text class="free-price">{{item.priceText}}</text>
+    </view>
   </view>
 
-  <view class="fixed-action action-row" wx:if="{{actionReady}}">
-    <button class="ghost-btn" bindtap="backEdit">返回修改</button>
-    <button class="primary-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">付款预定</button>
+  <view class="promise-card confirm-card">
+    <view class="promise-head">
+      <view class="promise-shield">✓</view>
+      <view>
+        <view class="card-title">支付承诺</view>
+        <view class="promise-copy">配送形式：楼下取机，楼下送回</view>
+      </view>
+    </view>
+    <view class="promise-icons">
+      <view wx:for="{{promiseItems}}" wx:key="label" class="promise-item">
+        <image src="{{item.icon}}" mode="aspectFit" />
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="pay-bar" wx:if="{{actionReady}}">
+    <view class="pay-total">
+      <view class="pay-symbol">¥</view>
+      <view>
+        <view class="pay-label">实付总价</view>
+        <view class="pay-price">¥{{totalPrice}}</view>
+      </view>
+    </view>
+    <view class="pay-actions">
+      <button class="edit-btn" bindtap="backEdit">返回修改</button>
+      <button class="pay-btn" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">付款预定</button>
+    </view>
   </view>
 </view>

@@ -9,6 +9,13 @@
     "pages/device/device",
     "pages/dorm/dorm",
     "pages/confirm/confirm",
+    "pages/order-detail/order-detail",
+    "pages/member/member",
+    "pages/orders/orders",
+    "pages/after-sale/after-sale",
+    "pages/reviews/reviews",
+    "pages/profile/profile",
+    "pages/security/security",
     "pages/logs/logs"
   ],
   "window": {

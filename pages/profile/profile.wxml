@@ -1,0 +1,51 @@
+<view class="profile-page">
+  <view class="section-label">基本信息</view>
+  <view class="profile-card">
+    <view class="profile-row">
+      <text>头像</text>
+      <view class="row-right">
+        <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}"></image>
+        <view wx:else class="avatar placeholder">{{avatarText}}</view>
+        <view class="arrow"></view>
+      </view>
+    </view>
+    <view class="profile-row">
+      <text>姓名</text>
+      <view class="row-right"><text>{{nickName || '请填写'}}</text><view class="arrow"></view></view>
+    </view>
+    <view class="profile-row">
+      <text>手机号</text>
+      <view class="row-right"><text>{{maskedPhone}}</text></view>
+    </view>
+    <view class="profile-row">
+      <text>性别</text>
+      <view class="gender-group">
+        <view class="gender-btn {{gender === '男' ? 'active' : ''}}" data-gender="男" bindtap="setGender">男</view>
+        <view class="gender-btn {{gender === '女' ? 'active' : ''}}" data-gender="女" bindtap="setGender">女</view>
+      </view>
+    </view>
+    <view class="profile-row">
+      <text>生日</text>
+      <view class="row-right"><text>{{birthday || '请选择'}}</text><view class="arrow"></view></view>
+    </view>
+    <view class="profile-row">
+      <text>地区</text>
+      <view class="row-right"><text>{{region || '请选择'}}</text><view class="arrow"></view></view>
+    </view>
+    <view class="profile-row last">
+      <text>默认宿舍楼</text>
+      <view class="row-right"><text>{{savedDorm || '未设置'}}</text><view class="arrow"></view></view>
+    </view>
+  </view>
+
+  <view class="section-label">通用设置</view>
+  <view class="profile-card">
+    <view class="profile-row last">
+      <view>
+        <view class="row-title">个性化推荐</view>
+        <view class="row-sub">开启后可看到你感兴趣的内容，建议开启</view>
+      </view>
+      <text>已允许</text>
+    </view>
+  </view>
+</view>

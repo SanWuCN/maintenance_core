@@ -146,7 +146,8 @@ Page({
   },
 
   getActiveAppointment(orders) {
-    const active = (orders || []).find(item => item.status !== '已完成' && item.status !== '已取消')
+    const activeIndex = (orders || []).findIndex(item => item.status !== '已完成' && item.status !== '已取消')
+    const active = activeIndex >= 0 ? orders[activeIndex] : null
     if (!active) {
       return null
     }
@@ -154,11 +155,17 @@ Page({
     const service = active.service || {}
     return {
       serviceName: service.name || active.serviceName || '电脑清灰维护',
-      bookTime: `${schedule.dateText || schedule.dateValue || ''} ${schedule.slotTime || ''}`.trim()
+      bookTime: `${schedule.dateText || schedule.dateValue || ''} ${schedule.slotTime || ''}`.trim(),
+      index: activeIndex
     }
   },
 
   getProfile() {
+    const userSession = wx.getStorageSync('userSession') || {}
+    if (userSession.userId) {
+      wx.navigateTo({ url: '/pages/profile/profile' })
+      return
+    }
     this.setData({ loginPanelVisible: true })
   },
 
@@ -177,8 +184,12 @@ Page({
   },
 
   // ========== 页面路由跳转预留口 ==========
-  goLevelDesc() {
-    wx.showToast({ title: '会员权益介绍开发中', icon: 'none' })
+  goMember() {
+    wx.navigateTo({ url: '/pages/member/member' })
+  },
+  goActiveOrder() {
+    if (!this.data.activeAppointment) return
+    wx.navigateTo({ url: `/pages/order-detail/order-detail?index=${this.data.activeAppointment.index}` })
   },
   goCards() {
     wx.showToast({ title: '查看特权次卡', icon: 'none' })
@@ -190,7 +201,7 @@ Page({
     wx.showToast({ title: '任务中心开发中', icon: 'none' })
   },
   goProfile() {
-    wx.showToast({ title: '个人信息设置', icon: 'none' })
+    wx.navigateTo({ url: '/pages/profile/profile' })
   },
   goAbout() {
     wx.showToast({ title: '关于我们', icon: 'none' })
@@ -202,27 +213,21 @@ Page({
     wx.showToast({ title: '问题反馈', icon: 'none' })
   },
   goSecurity() {
+    wx.navigateTo({ url: '/pages/security/security' })
+  },
+  goOrders(e) {
     const userSession = wx.getStorageSync('userSession') || {}
     if (!userSession.userId) {
       this.setData({ loginPanelVisible: true })
       return
     }
-    wx.showModal({
-      title: '账号与安全',
-      content: '确定退出当前账号吗？退出后本机将不再显示该账号的会员资产和订单。',
-      confirmText: '退出账号',
-      confirmColor: '#111111',
-      success: res => {
-        if (!res.confirm) return
-        wx.removeStorageSync('userSession')
-        wx.removeStorageSync('userInfo')
-        wx.removeStorageSync('orders')
-        this.resetUserState()
-        wx.showToast({
-          title: '已退出账号',
-          icon: 'none'
-        })
-      }
-    })
+    const status = (e.currentTarget.dataset || {}).status || 'all'
+    wx.navigateTo({ url: `/pages/orders/orders?status=${status}` })
+  },
+  goReviews() {
+    wx.navigateTo({ url: '/pages/reviews/reviews' })
+  },
+  goAfterSale() {
+    wx.navigateTo({ url: '/pages/after-sale/after-sale' })
   }
 })

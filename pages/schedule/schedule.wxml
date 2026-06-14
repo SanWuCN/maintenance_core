@@ -18,10 +18,9 @@
         <text>{{selectedDateText}}</text>
         <view class="date-arrow"></view>
       </view>
-      <view class="calendar-link" bindtap="openDatePicker">项目日历</view>
     </view>
 
-    <scroll-view class="date-strip" scroll-x show-scrollbar="{{false}}" scroll-into-view="d{{selectedDate}}">
+    <scroll-view class="date-strip" scroll-x show-scrollbar="{{false}}">
       <view
         wx:for="{{dates}}"
         wx:key="value"

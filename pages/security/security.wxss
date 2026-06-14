@@ -1,0 +1,56 @@
+.security-page {
+  min-height: 100vh;
+  background: #f5f5f3;
+  padding: 22rpx 0 80rpx;
+  box-sizing: border-box;
+}
+
+.group {
+  margin: 0 24rpx 24rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.sec-row {
+  min-height: 98rpx;
+  margin-left: 28rpx;
+  padding-right: 28rpx;
+  border-bottom: 1rpx solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #333333;
+  font-size: 30rpx;
+}
+
+.sec-row.last {
+  border-bottom: 0;
+}
+
+.row-right {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  color: #333333;
+}
+
+.arrow {
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 4rpx solid #aaaaaa;
+  border-right: 4rpx solid #aaaaaa;
+  transform: rotate(45deg);
+}
+
+.logout-btn {
+  margin: 52rpx 28rpx 0;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 999rpx;
+  padding: 0;
+  background: #111111;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 950;
+}

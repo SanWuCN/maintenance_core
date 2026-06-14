@@ -27,9 +27,16 @@
     </view>
   </view>
 
-  <view class="tech-card picker-card">
-    <view class="block-title">常用型号</view>
-    <view class="model-list">
+  <view class="tech-card picker-card {{modelPanelCollapsed ? 'collapsed' : ''}}">
+    <view class="block-title">系列 / 常用型号</view>
+    <view wx:if="{{modelPanelCollapsed}}" class="model-summary" bindtap="expandModelPanel">
+      <view>
+        <view class="model-summary-title">{{selectedModel}}</view>
+        <view class="model-summary-copy">点这里重新展开系列列表</view>
+      </view>
+      <view class="model-summary-action">重选</view>
+    </view>
+    <scroll-view wx:else class="model-list" scroll-y show-scrollbar="{{false}}">
       <view
         wx:for="{{models}}"
         wx:key="*this"
@@ -40,13 +47,62 @@
         <text>{{item}}</text>
         <view class="model-dot"></view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 
   <view class="tech-card form-card">
     <view class="block-title">补充信息</view>
-    <input class="text-input" placeholder="自定义型号，如 ROG 魔霸新锐 2023" value="{{customModel}}" bindinput="onCustomModel" />
-    <textarea class="textarea" placeholder="可填写温度高、异响、进灰严重、多久没清灰等情况" value="{{deviceNote}}" bindinput="onNote" />
+    <input
+      class="text-input"
+      placeholder="具体型号，如 2025 R9000P / 小新 Pro 14"
+      value="{{customModel}}"
+      confirm-type="done"
+      cursor-spacing="180"
+      adjust-position="{{true}}"
+      bindtap="openModelSuggest"
+      bindfocus="openModelSuggest"
+      bindinput="onCustomModel"
+      bindconfirm="confirmCustomModel"
+    />
+    <view wx:if="{{modelSuggestVisible}}" class="suggest-panel">
+      <view class="suggest-head">
+        <view>
+          <view class="suggest-title">推荐型号</view>
+          <view class="suggest-sub">{{selectedBrand}} · {{selectedModel}}</view>
+        </view>
+        <view class="suggest-close" bindtap="closeModelSuggest">×</view>
+      </view>
+      <view class="suggest-body">
+        <scroll-view class="suggest-left" scroll-y show-scrollbar="{{false}}">
+          <view
+            wx:for="{{recommendGroups}}"
+            wx:key="key"
+            class="suggest-tab {{selectedRecommendGroupKey === item.key ? 'selected' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="selectRecommendGroup"
+          >{{item.label}}</view>
+        </scroll-view>
+        <scroll-view class="suggest-right" scroll-y show-scrollbar="{{false}}">
+          <view
+            wx:for="{{selectedRecommendItems}}"
+            wx:key="*this"
+            class="suggest-model"
+            data-model="{{item}}"
+            bindtap="chooseRecommendModel"
+          >{{item}}</view>
+        </scroll-view>
+      </view>
+      <view class="suggest-foot">也可以关闭后直接手动输入。</view>
+    </view>
+    <textarea
+      class="textarea"
+      placeholder="可填写温度高、异响、进灰严重、多久没清灰等情况"
+      value="{{deviceNote}}"
+      cursor-spacing="220"
+      adjust-position="{{true}}"
+      show-confirm-bar="{{false}}"
+      bindinput="onNote"
+    />
   </view>
 
   <view class="fixed-action" wx:if="{{actionReady}}">
