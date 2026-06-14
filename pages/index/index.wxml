@@ -1,45 +1,47 @@
-<scroll-view class="home page-shell" scroll-y enhanced show-scrollbar="{{false}}">
-  <swiper class="poster-swiper" circular indicator-dots autoplay interval="4200" duration="480">
-    <swiper-item wx:for="{{posters}}" wx:key="*this">
-      <view class="poster-card">
-        <image class="poster-image" src="{{item}}" mode="aspectFill"></image>
+<view class="home-wrap">
+  <view wx:if="{{!heroReady}}" class="boot-screen">
+    <view class="boot-mark">SW</view>
+    <view class="boot-line"></view>
+  </view>
+
+  <scroll-view class="home page-shell {{heroReady ? 'home-ready' : 'home-hidden'}}" scroll-y enhanced show-scrollbar="{{false}}">
+    <swiper class="poster-swiper" circular indicator-dots autoplay interval="8400" duration="560">
+      <swiper-item wx:for="{{posters}}" wx:key="*this">
+        <view class="poster-card">
+          <image
+            class="poster-image"
+            src="{{item}}"
+            mode="aspectFill"
+            data-index="{{index}}"
+            bindload="onPosterLoad"
+            binderror="onPosterError"
+          ></image>
+        </view>
+      </swiper-item>
+    </swiper>
+
+    <view class="business-grid">
+      <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="goService">
+        <view class="business-mark"></view>
+        <view class="business-ui fan-ui"></view>
+        <view class="business-title">清灰维护</view>
+        <view class="business-desc">风扇除尘 / 深度保养</view>
+        <view class="business-deco"></view>
       </view>
-    </swiper-item>
-  </swiper>
-
-  <view class="business-grid">
-    <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="goService">
-      <view class="business-mark"></view>
-      <view class="business-title">清灰维护</view>
-      <view class="business-desc">风扇除尘 / 深度保养</view>
-      <view class="business-deco"></view>
+      <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
+        <view class="business-mark"></view>
+        <view class="business-ui chip-ui"></view>
+        <view class="business-title">硬件升级</view>
+        <view class="business-desc">内存硬盘 / 性能扩展</view>
+        <view class="business-deco"></view>
+      </view>
+      <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
+        <view class="business-mark"></view>
+        <view class="business-ui tune-ui"></view>
+        <view class="business-title">系统优化</view>
+        <view class="business-desc">清理加速 / 故障修复</view>
+        <view class="business-deco"></view>
+      </view>
     </view>
-    <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
-      <view class="business-mark"></view>
-      <view class="business-title">硬件升级</view>
-      <view class="business-desc">内存硬盘 / 性能扩展</view>
-      <view class="business-deco"></view>
-    </view>
-    <view class="business-item" hover-class="business-item-pressed" hover-start-time="20" hover-stay-time="120" bindtap="comingSoon">
-      <view class="business-mark"></view>
-      <view class="business-title">系统优化</view>
-      <view class="business-desc">清理加速 / 故障修复</view>
-      <view class="business-deco"></view>
-    </view>
-  </view>
-
-  <view class="assurance">
-    <view class="assurance-item">
-      <view class="assurance-k">记录</view>
-      <view class="assurance-v">全程视频</view>
-    </view>
-    <view class="assurance-item">
-      <view class="assurance-k">取送</view>
-      <view class="assurance-v">宿舍楼下</view>
-    </view>
-    <view class="assurance-item">
-      <view class="assurance-k">透明</view>
-      <view class="assurance-v">先确认</view>
-    </view>
-  </view>
-</scroll-view>
+  </scroll-view>
+</view>
