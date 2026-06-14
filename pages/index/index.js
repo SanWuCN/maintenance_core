@@ -111,6 +111,9 @@ Page({
       }
     })
   },
+  closeLoginPanel() {
+    this.setData({ loginPanelVisible: false })
+  },
   goService() {
     wx.navigateTo({
       url: '/pages/service/service'
