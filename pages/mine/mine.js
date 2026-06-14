@@ -2,7 +2,7 @@ const api = require('../../utils/api.js')
 
 Page({
   data: {
-    logoUrl: `${api.ASSET_URL}/swart-logo-transparent.png`,
+    logoUrl: `${api.ASSET_URL}/app-icon-512.png`,
     nickName: '',
     avatarText: 'SW',
     savedDorm: '',

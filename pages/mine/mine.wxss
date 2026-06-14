@@ -15,8 +15,10 @@
 }
 
 .profile-logo {
-  width: 164rpx;
-  height: 64rpx;
+  width: 86rpx;
+  height: 86rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.08);
 }
 
 .profile-info {

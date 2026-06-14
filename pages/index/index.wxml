@@ -3,24 +3,24 @@
     <swiper-item wx:for="{{posters}}" wx:key="*this">
       <view class="poster-card">
         <image class="poster-image" src="{{item}}" mode="aspectFill"></image>
-        <view class="poster-fade"></view>
-        <view class="business-glass">
-          <view class="business-item active" bindtap="goService">
-            <view class="business-icon fan"></view>
-            <view class="business-title">清灰维护</view>
-          </view>
-          <view class="business-item" bindtap="comingSoon">
-            <view class="business-icon chip"></view>
-            <view class="business-title">硬件升级</view>
-          </view>
-          <view class="business-item" bindtap="comingSoon">
-            <view class="business-icon tune"></view>
-            <view class="business-title">系统优化</view>
-          </view>
-        </view>
       </view>
     </swiper-item>
   </swiper>
+
+  <view class="business-grid">
+    <view class="business-item active" bindtap="goService">
+      <view class="business-icon fan"></view>
+      <view class="business-title">清灰维护</view>
+    </view>
+    <view class="business-item" bindtap="comingSoon">
+      <view class="business-icon chip"></view>
+      <view class="business-title">硬件升级</view>
+    </view>
+    <view class="business-item" bindtap="comingSoon">
+      <view class="business-icon tune"></view>
+      <view class="business-title">系统优化</view>
+    </view>
+  </view>
 
   <view class="assurance">
     <view class="assurance-item">
